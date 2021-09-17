@@ -1,0 +1,3 @@
+li#wp-admin-bar-hestia-nginx-cache-manual-purge > .ab-item::before {
+    content: "\f515";
+}
