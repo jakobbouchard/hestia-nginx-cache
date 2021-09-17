@@ -98,12 +98,12 @@ class Hestia_Nginx_Cache_Admin {
 
 			<form method="post" action="options.php">
 				<?php settings_fields( self::NAME );
-				do_settings_sections( self::NAME );	
+				do_settings_sections( self::NAME );
 				submit_button(); ?>
 			</form>
 		</div>
 		<?php
-	} 
+	}
 
 	public function add_scripts() {
 		wp_register_script( self::NAME, plugins_url( 'assets/js/admin.js', dirname( __FILE__ ) ) );
