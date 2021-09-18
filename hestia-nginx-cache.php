@@ -96,7 +96,7 @@ class Hestia_Nginx_Cache {
 		$domain = parse_url( get_site_url(), PHP_URL_HOST );
 
 		// Prepare POST query
-		$postvars = array(
+		$body = array(
 			'hash' => $api_key,
 			'returncode' => 'yes',
 			'cmd' => 'v-purge-nginx-cache',
@@ -104,18 +104,19 @@ class Hestia_Nginx_Cache {
 			'arg2' => $domain,
 		);
 
-		// Send POST query via cURL
-		$postdata = http_build_query ( $postvars );
-		$curl = curl_init();
-		curl_setopt( $curl, CURLOPT_URL, 'https://' . $hostname . ':' . $port . '/api/' );
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, false );
-		curl_setopt( $curl, CURLOPT_POST, true );
-		curl_setopt( $curl, CURLOPT_POSTFIELDS, $postdata );
-		$answer = curl_exec( $curl );
+		$args = array(
+			'body'        => $body,
+			'timeout'     => '5',
+			'redirection' => '5',
+			'httpversion' => '1.0',
+			'blocking'    => true,
+			'headers'     => array(),
+			'cookies'     => array(),
+		);
 
-		return $answer;
+		$response = wp_remote_post( 'https://' . $hostname . ':' . $port . '/api/', $args );
+
+		return $response;
 	}
 }
 

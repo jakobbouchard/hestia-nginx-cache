@@ -140,7 +140,7 @@ class Hestia_Nginx_Cache_Admin {
 	public function purge() {
 		$result = $this->plugin->purge();
 
-		if ( wp_verify_nonce( $_POST['wp_nonce'], self::NAME . '-purge-wp-nonce' ) && $result === '0' ) {
+		if ( wp_verify_nonce( $_POST['wp_nonce'], self::NAME . '-purge-wp-nonce' ) && !is_wp_error( $result ) ) {
 			echo json_encode( array(
 				'success' => true,
 				'message' => __( 'The Hestia Nginx Cache was purged successfully.', 'hestia-nginx-cache' )
@@ -150,7 +150,7 @@ class Hestia_Nginx_Cache_Admin {
 			echo json_encode( array(
 				'success' => false,
 				'message' => __( 'The Hestia Nginx Cache could not be purged!', 'hestia-nginx-cache' ),
-				'error'   => $result
+				'error'   => $result->get_error_message()
 			) );
 		}
 
