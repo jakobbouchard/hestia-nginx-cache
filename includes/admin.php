@@ -8,7 +8,7 @@
  */
 
 class Hestia_Nginx_Cache_Admin {
-	const NAME = 'hestia-nginx-cache';
+	public const NAME = 'hestia-nginx-cache';
 
 	private $plugin = null;
 
@@ -29,7 +29,11 @@ class Hestia_Nginx_Cache_Admin {
 	}
 
 	public function register_settings() {
-		register_setting( self::NAME, self::NAME, 'hestia_nginx_options_validate' );
+		register_setting(
+			self::NAME,
+			self::NAME,
+			array( 'sanitize_callback' => array( $this, 'hestia_nginx_options_validate' ) )
+		);
 
 		add_settings_section( 'api_settings', 'API Settings', array( $this, 'hestia_nginx_section_text' ), self::NAME );
 
@@ -40,17 +44,22 @@ class Hestia_Nginx_Cache_Admin {
 	}
 
 	public function hestia_nginx_options_validate( $input ) {
-		$newinput['port'] = trim( $input['port'] );
-		$newinput['api_key'] = trim( $input['api_key'] );
+		$options = get_option( self::NAME );
 
-		if ( ! preg_match( '/^\d{1,5}$/i', $newinput['port'] ) ) {
-			$newinput['port'] = '';
-		}
-		if ( ! preg_match( '/^[a-z0-9-_]{32}$/i', $newinput['api_key'] ) ) {
-			$newinput['api_key'] = '';
+		$input['port'] = trim( $input['port'] );
+		$input['api_key'] = trim( $input['api_key'] );
+
+		if ( ! preg_match( '/^\d{1,5}$/i', $input['port'] ) ) {
+			$input['port'] = '';
 		}
 
-		return $newinput;
+		if ( $input['api_key'] == 'you_really_thought_id_leave_it' ) {
+			$input['api_key'] = $options['api_key'];
+		} elseif ( ! preg_match( '/^[a-z0-9-_]{32}$/i', $input['api_key'] ) ) {
+			$input['api_key'] = '';
+		}
+
+		return $input;
 	}
 
 	public function hestia_nginx_section_text() {
@@ -69,7 +78,8 @@ class Hestia_Nginx_Cache_Admin {
 
 	public function hestia_nginx_setting_api_key() {
 		$options = get_option( self::NAME );
-		echo "<input id='hestia_nginx_setting_api_key' name='" . self::NAME . "[api_key]' type='text' value='" . esc_attr( $options['api_key'] ) . "' required />";
+		$api_key = $options['api_key'] ? 'you_really_thought_id_leave_it' : '';
+		echo "<input id='hestia_nginx_setting_api_key' name='" . self::NAME . "[api_key]' type='password' value='" . $api_key . "' required />";
 	}
 
 	public function hestia_nginx_setting_user() {
