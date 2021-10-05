@@ -4,7 +4,7 @@ Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
 Tested up to: 5.8.1
 Requires PHP: 5.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -32,7 +32,7 @@ Run `v-generate-api-key` on your machine. Do note that API keys have *FULL* admi
 
 = Why does the plugin clear the cache multiple times? =
 
-Multiple events happen when doing a certain action. For example, saving a post fires the `save_post` hook as well as `transition_post_status`, and probably a bunch of others too.
+This should have been fixed with 1.1.0, please update if you haven't done so.
 
 I might fix it at some point in the future by building a purge queue instead and trying to remove duplicate events, or by adding a rate limit.
 
@@ -55,6 +55,10 @@ If you are using Cloudflare and get an error when purging the cache, enter the h
 That's not a question, but okay! I don't have much experience with programming WordPress plugins, so the code might be shit at some places. I might refactor the plugin at some point, but for now it works.
 
 == Changelog ==
+
+= 1.1.0 =
+* Changed the way purges are done, so that they are done only once per post instead of 10+ times.
+* Hide password in frontend.
 
 = 1.0.0 =
 * Initial release.
