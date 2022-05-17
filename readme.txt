@@ -48,7 +48,9 @@ If you are using Cloudflare and get an error when purging the cache, enter the h
 
 = 2.0.0 =
 * Add support for the new Hestia API, released in 1.6.0.
-* Drop support for the legacy API, as it was quite unsecure for many reasons.
+* Add settings link in the plugins list.
+* Remove jQuery usage in the admin JS.
+* Remove support for the legacy API, as it was quite unsecure for many reasons.
 
 = 1.2.2 =
 * Fix automatic purging.
