@@ -161,14 +161,14 @@ class Hestia_Nginx_Cache_Admin
 
 	public function embed_admin_notices()
 	{
-		echo '<div id="' . self::NAME . '-admin-notices' . '" class="hidden notice"></div>';
+		echo '<div id="' . self::NAME . '-admin-notices"></div>';
 	}
 
 	public function purge()
 	{
-		$result = $this->plugin->purge();
+		$result = $this->plugin->purge(true);
 
-		if (wp_verify_nonce($_POST['wp_nonce'], self::NAME . '-purge-wp-nonce') && !is_wp_error($result)) {
+		if (wp_verify_nonce($_POST['wp_nonce'], self::NAME . '-purge-wp-nonce') && !is_wp_error($result) && $result !== false) {
 			echo json_encode(array(
 				'success' => true,
 				'message' => __('The Hestia Nginx Cache was purged successfully.', 'hestia-nginx-cache')

@@ -92,11 +92,12 @@ class Hestia_Nginx_Cache
 	{
 		$this->purge = true;
 	}
-	public function purge()
+	public function purge($force)
 	{
-		if ($this->purge !== true) {
+		if ($this->purge !== true && !$force) {
 			return false;
 		}
+
 		$options = get_option(self::NAME);
 		if (!$options || !isset($options['api_key']) || $options['api_key'] == '') {
 			return false;
