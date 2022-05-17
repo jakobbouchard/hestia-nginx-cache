@@ -177,7 +177,7 @@ class Hestia_Nginx_Cache_Admin
 			echo json_encode(array(
 				'success' => false,
 				'message' => __('The Hestia Nginx Cache could not be purged!', 'hestia-nginx-cache'),
-				'error'   => $result->get_error_message()
+				'error'   => is_wp_error($result) ? $result->get_error_message() : 'Options are missing'
 			));
 		}
 
