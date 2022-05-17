@@ -26,7 +26,9 @@ class Hestia_Nginx_Cache_Admin
 		// Add menu button
 		add_action('admin_print_styles', array($this, 'add_styles'));
 		add_action('admin_enqueue_scripts', array($this, 'add_scripts'));
-		add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
+		if ($this->plugin::$is_configured) {
+			add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
+		}
 
 		// Handle purge requests.
 		add_action('wp_ajax_hestia_nginx_cache_manual_purge', array($this, 'purge'));

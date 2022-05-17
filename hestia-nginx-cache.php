@@ -30,6 +30,7 @@ class Hestia_Nginx_Cache
 
 	private static $instance = null;
 	public static $plugin_basename = null;
+	public static $is_configured = false;
 
 	private $purge = false;
 
@@ -62,6 +63,10 @@ class Hestia_Nginx_Cache
 	private function __construct()
 	{
 		$this::$plugin_basename = plugin_basename(__FILE__);
+		$options = get_option(self::NAME);
+		if ($options && isset($options['access_key']) && $options['access_key'] != '' && isset($options['secret_key']) && $options['secret_key'] != '') {
+			$this::$is_configured = true;
+		}
 		add_action('init', array($this, 'init'));
 		add_action('shutdown', array($this, 'purge'));
 	}
@@ -100,10 +105,10 @@ class Hestia_Nginx_Cache
 			return false;
 		}
 
-		$options = get_option(self::NAME);
-		if (!$options || !isset($options['access_key']) || $options['access_key'] == '' || !isset($options['secret_key']) || $options['secret_key'] == '') {
+		if (!$this::$is_configured) {
 			return false;
 		}
+		$options = get_option(self::NAME);
 
 		// Server credentials
 		$hostname = $options['host'];
