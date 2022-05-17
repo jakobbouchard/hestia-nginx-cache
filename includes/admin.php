@@ -16,6 +16,9 @@ class Hestia_Nginx_Cache_Admin
 	{
 		$this->plugin = Hestia_Nginx_Cache::get_instance();
 
+		// Add settings link to plugin actions.
+		add_filter('plugin_action_links_' . $this->plugin::$plugin_basename, array($this, 'settings_link'));
+
 		// Add settings page.
 		add_action('admin_init', array($this, 'register_settings'));
 		add_action('admin_menu', array($this, 'add_settings_page'));
@@ -27,6 +30,18 @@ class Hestia_Nginx_Cache_Admin
 
 		// Handle purge requests.
 		add_action('wp_ajax_hestia_nginx_cache_manual_purge', array($this, 'purge'));
+	}
+
+	function settings_link($links)
+	{
+		$url = esc_url(add_query_arg(
+			'page',
+			$this->plugin::NAME,
+			get_admin_url() . 'admin.php'
+		));
+
+		array_push($links, "<a href='$url'>" . __('Settings', $this->plugin::NAME) . '</a>');
+		return $links;
 	}
 
 	public function register_settings()
@@ -66,7 +81,7 @@ class Hestia_Nginx_Cache_Admin
 
 	public function hestia_nginx_section_text()
 	{
-		echo '<p>Here you can set all the options for the API. Please refer to the <a href="https://docs.hestiacp.com/admin_docs/api/rest_api.html" rel="noopener" target="_blank">Hestia Docs</a> for information on how to create an API key.</p>';
+		echo '<p>Here you can set all the options for the API. Please refer to the <a href="https://docs.hestiacp.com/admin_docs/api/rest_api.html" rel="noopener noreferrer" target="_blank">Hestia Docs</a> for information on how to create an API key.</p>';
 	}
 
 	public function setting_host($test)

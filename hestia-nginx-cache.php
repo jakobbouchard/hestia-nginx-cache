@@ -29,6 +29,7 @@ class Hestia_Nginx_Cache
 	public const NAME = 'hestia-nginx-cache';
 
 	private static $instance = null;
+	public static $plugin_basename = null;
 
 	private $purge = false;
 
@@ -60,6 +61,7 @@ class Hestia_Nginx_Cache
 
 	private function __construct()
 	{
+		$this::$plugin_basename = plugin_basename(__FILE__);
 		add_action('init', array($this, 'init'));
 		add_action('shutdown', array($this, 'purge'));
 	}
@@ -91,6 +93,7 @@ class Hestia_Nginx_Cache
 	{
 		$this->purge = true;
 	}
+
 	public function purge($force = false)
 	{
 		if ($this->purge !== true && !$force) {
