@@ -85,7 +85,7 @@ class Hestia_Nginx_Cache_Admin
 
 	public function hestia_nginx_section_text()
 	{
-		echo '<p>Here you can set all the options for the API. Please refer to the <a href="https://docs.hestiacp.com/admin_docs/api/rest_api.html" rel="noopener noreferrer" target="_blank">Hestia Docs</a> for information on how to create an API key.</p>';
+		echo '<p>Here you can set all the options for the API. Please refer to the plugin\'s installation guide for information on how to generate an API key.</p>';
 	}
 
 	public function setting_host()
