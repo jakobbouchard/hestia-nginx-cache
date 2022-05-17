@@ -78,26 +78,26 @@ class Hestia_Nginx_Cache_Admin
 	public function setting_port()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo "<input id='hestia_nginx_setting_port' name='" . $this->plugin::NAME . "[port]' type='text' value='" . esc_attr($options['port']) . "' required />";
+		echo '<input id="hestia_nginx_setting_port" name="' . $this->plugin::NAME . '[port]" type="text" value="' . esc_attr($options['port']) . '" required />';
 	}
 
 	public function setting_access_key()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo "<input id='hestia_nginx_setting_access_key' name='" . $this->plugin::NAME . "[access_key]' type='text' value='" . esc_attr($options['access_key']) . "' required />";
+		echo '<input id="hestia_nginx_setting_access_key" name="' . $this->plugin::NAME . '[access_key]" type="text" value="' . esc_attr($options['access_key']) . '" required />';
 	}
 
 	public function setting_secret_key()
 	{
 		$options = get_option($this->plugin::NAME);
 		$secret_key = $options['secret_key'] ? '#secret_key_PLACEHOLDER#' : '';
-		echo "<input id='hestia_nginx_setting_secret_key' name='" . $this->plugin::NAME . "[secret_key]' type='password' value='" . $secret_key . "' required />";
+		echo '<input id="hestia_nginx_setting_secret_key" name="' . $this->plugin::NAME . '[secret_key]" type="password" value="' . $secret_key . '" required />';
 	}
 
 	public function setting_user()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo "<input id='hestia_nginx_setting_user' name='" . $this->plugin::NAME . "[user]' type='text' value='" . esc_attr($options['user']) . "' required />";
+		echo '<input id="hestia_nginx_setting_user" name="' . $this->plugin::NAME . '[user]" type="text" value="' . esc_attr($options['user']) . '" required />';
 	}
 
 	public function add_settings_page()
