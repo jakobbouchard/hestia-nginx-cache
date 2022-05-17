@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hestia Nginx Cache
  *
@@ -19,120 +20,120 @@
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-if (! defined('ABSPATH')) {
-    exit();
+if (!defined('ABSPATH')) {
+	exit();
 }
 
 class Hestia_Nginx_Cache
 {
-    public const NAME = 'hestia-nginx-cache';
+	public const NAME = 'hestia-nginx-cache';
 
-    private static $instance = null;
-    private $admin = null;
+	private static $instance = null;
+	private $admin = null;
 
-    private $purge = false;
+	private $purge = false;
 
-    private $events = array(
-        'edit_post',
-        'save_post',
-        'post_updated',
-        'deleted_post',
-        'trashed_post',
-        'wp_trash_post',
-        'add_attachment',
-        'edit_attachment',
-        'attachment_updated',
-        'publish_phone',
-        'clean_post_cache',
-        'pingback_post',
-        'comment_post',
-        'edit_comment',
-        'delete_comment',
-        'wp_insert_comment',
-        'wp_set_comment_status',
-        'trackback_post',
-        'transition_post_status',
-        'transition_comment_status',
-        'wp_update_nav_menu',
-        'switch_theme',
-        'permalink_structure_changed',
-    );
+	private $events = array(
+		'edit_post',
+		'save_post',
+		'post_updated',
+		'deleted_post',
+		'trashed_post',
+		'wp_trash_post',
+		'add_attachment',
+		'edit_attachment',
+		'attachment_updated',
+		'publish_phone',
+		'clean_post_cache',
+		'pingback_post',
+		'comment_post',
+		'edit_comment',
+		'delete_comment',
+		'wp_insert_comment',
+		'wp_set_comment_status',
+		'trackback_post',
+		'transition_post_status',
+		'transition_comment_status',
+		'wp_update_nav_menu',
+		'switch_theme',
+		'permalink_structure_changed',
+	);
 
-    private function __construct()
-    {
-        add_action('init', array( $this, 'init' ));
-        add_action('shutdown', array($this, 'purge'));
-    }
+	private function __construct()
+	{
+		add_action('init', array($this, 'init'));
+		add_action('shutdown', array($this, 'purge'));
+	}
 
-    public static function get_instance()
-    {
-        if (! self::$instance) {
-            self::$instance = new self();
-        }
+	public static function get_instance()
+	{
+		if (!self::$instance) {
+			self::$instance = new self();
+		}
 
-        return self::$instance;
-    }
+		return self::$instance;
+	}
 
-    public function init()
-    {
-        load_plugin_textdomain('hestia-nginx-cache', false, 'hestia-nginx-cache/languages');
+	public function init()
+	{
+		load_plugin_textdomain('hestia-nginx-cache', false, 'hestia-nginx-cache/languages');
 
-        if (is_admin()) {
-            require_once __DIR__ . '/includes/admin.php';
-            $this->admin = new Hestia_Nginx_Cache_Admin();
-        }
+		if (is_admin()) {
+			require_once __DIR__ . '/includes/admin.php';
+			$this->admin = new Hestia_Nginx_Cache_Admin();
+		}
 
-        foreach ($this->events as $event) {
-            add_action($event, array( $this, 'consolidate_purge' ));
-        }
-    }
+		foreach ($this->events as $event) {
+			add_action($event, array($this, 'consolidate_purge'));
+		}
+	}
 
-    public function consolidate_purge()
-    {
-        $this -> purge = true;
-    }
-    public function purge()
-    {
-        if ($this -> purge !== true) {
-            return false;
-        }
-        $options = get_option(self::NAME);
-        if (! $options || !isset($options['api_key']) || $options['api_key'] == '') {
-            return false;
-        }
+	public function consolidate_purge()
+	{
+		$this->purge = true;
+	}
+	public function purge()
+	{
+		if ($this->purge !== true) {
+			return false;
+		}
+		$options = get_option(self::NAME);
+		if (!$options || !isset($options['api_key']) || $options['api_key'] == '') {
+			return false;
+		}
 
-        // Server credentials
-        $hostname = $options['host'];
-        $port = $options['port'];
-        $api_key = $options['api_key'];
+		// Server credentials
+		$hostname = $options['host'];
+		$port = $options['port'];
+		$api_key = $options['api_key'];
 
-        // Info to purge
-        $username = $options['user'];
-        $domain = parse_url(get_site_url(), PHP_URL_HOST);
+		// Info to purge
+		$username = $options['user'];
+		$domain = parse_url(get_site_url(), PHP_URL_HOST);
 
-        // Prepare POST query
-        $body = array(
-            'hash' => $api_key,
-            'returncode' => 'yes',
-            'cmd' => 'v-purge-nginx-cache',
-            'arg1' => $username,
-            'arg2' => $domain,
-        );
+		// Prepare POST query
+		$body = array(
+			'hash' => $api_key,
+			'returncode' => 'yes',
+			'cmd' => 'v-purge-nginx-cache',
+			'arg1' => $username,
+			'arg2' => $domain,
+		);
 
-        $args = array(
-            'body'        => $body,
-            'timeout'     => '5',
-            'redirection' => '5',
-            'httpversion' => '1.0',
-            'blocking'    => true,
-            'headers'     => array(),
-            'cookies'     => array(),
-        );
+		$args = array(
+			'body'        => $body,
+			'timeout'     => '5',
+			'redirection' => '5',
+			'httpversion' => '1.0',
+			'blocking'    => true,
+			'headers'     => array(),
+			'cookies'     => array(),
+		);
 
-        $response = wp_remote_post('https://' . $hostname . ':' . $port . '/api/', $args);
+		$response = wp_remote_post('https://' . $hostname . ':' . $port . '/api/', $args);
 
-        return $response;
-    }
+		return $response;
+	}
 }
 
 Hestia_Nginx_Cache::get_instance();
