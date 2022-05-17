@@ -30,11 +30,11 @@ window.addEventListener("DOMContentLoaded", (_event) => {
 				console.error(error);
 				notice.classList.add("notice-error");
 				notice.querySelector("p").textContent = "An error occured while purging the cache.";
+			} finally {
+				if (oldNotice) {
+					oldNotice.remove();
+				}
+				container.append(notice);
 			}
-
-			if (oldNotice) {
-				oldNotice.remove();
-			}
-			container.append(notice);
 		});
 });
