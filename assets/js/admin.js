@@ -20,7 +20,7 @@ window.addEventListener("DOMContentLoaded", (_event) => {
 				});
 				if (!res.ok) {
 					notice.classList.add("notice-error");
-					notice.querySelector("p").textContent = "An error occured while purging the cache.";
+					notice.querySelector("p").textContent = "The Hestia Nginx Cache could not be purged!";
 				} else {
 					const { success, data } = await res.clone().json();
 					notice.classList.add(success ? "notice-success" : "notice-error");
@@ -29,7 +29,7 @@ window.addEventListener("DOMContentLoaded", (_event) => {
 			} catch (error) {
 				console.error(error);
 				notice.classList.add("notice-error");
-				notice.querySelector("p").textContent = "An error occured while purging the cache.";
+				notice.querySelector("p").textContent = "The Hestia Nginx Cache could not be purged!";
 			} finally {
 				if (oldNotice) {
 					oldNotice.remove();

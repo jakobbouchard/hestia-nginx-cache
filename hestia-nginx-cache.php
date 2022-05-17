@@ -118,7 +118,7 @@ class Hestia_Nginx_Cache
 
 		// Info to purge
 		$username = $options['user'];
-		$domain = parse_url(get_site_url(), PHP_URL_HOST);
+		$domain = $options['domain'];
 
 		// Prepare POST query
 		$body = array(
