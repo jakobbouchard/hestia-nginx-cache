@@ -4,7 +4,7 @@ Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
 Tested up to: 6.0
 Requires PHP: 5.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -45,6 +45,9 @@ You can try to resolve the problem by purging the cache, deactivating the plugin
 If you are using Cloudflare and get an error when purging the cache, enter the hostname of the Hestia install in the settings, not the site URL.
 
 == Changelog ==
+
+= 1.2.2 =
+* Fix automatic purging.
 
 = 1.2.1 =
 * Fix error notice not appearing when the cache failed to clear.
