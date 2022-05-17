@@ -98,15 +98,15 @@ class Hestia_Nginx_Cache
 		}
 
 		$options = get_option(self::NAME);
-		if (!$options || !isset($options['api_key']) || $options['api_key'] == '' || !isset($options['api_secret']) || $options['api_secret'] == '') {
+		if (!$options || !isset($options['access_key']) || $options['access_key'] == '' || !isset($options['secret_key']) || $options['secret_key'] == '') {
 			return false;
 		}
 
 		// Server credentials
 		$hostname = $options['host'];
 		$port = $options['port'];
-		$api_key = $options['api_key'];
-		$api_secret = $options['api_secret'];
+		$access_key = $options['access_key'];
+		$secret_key = $options['secret_key'];
 
 		// Info to purge
 		$username = $options['user'];
@@ -114,23 +114,14 @@ class Hestia_Nginx_Cache
 
 		// Prepare POST query
 		$body = array(
-			'hash' => $api_key . ':' . $api_secret,
+			'hash' => "$access_key:$secret_key",
 			'returncode' => 'yes',
 			'cmd' => 'v-purge-nginx-cache',
 			'arg1' => $username,
 			'arg2' => $domain,
 		);
 
-		$args = array(
-			'method'    => 'POST',
-			'blocking'  => true,
-			'headers'   => array(
-				'Content-type: application/x-www-form-urlencoded'
-			),
-			'body'      => $body,
-		);
-
-		return wp_remote_post('https://' . $hostname . ':' . $port . '/api/', $args);
+		return wp_remote_post("https://$hostname:$port/api/", array('body' => $body));
 	}
 }
 
