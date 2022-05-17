@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       Hestia Nginx Cache
  * Description:       Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache when needed.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 4.8
  * Requires PHP:      5.4
  * Author:            Jakob Bouchard
