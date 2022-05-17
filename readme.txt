@@ -4,11 +4,11 @@ Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
 Tested up to: 6.0
 Requires PHP: 5.4
-Stable tag: 1.2.2
+Stable tag: 2.0.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
-Purge Nginx cache automatically after making website changes. Uses the HestiaCP API.
+Purge Nginx cache automatically after making website changes. Uses the *new* HestiaCP API, released in 1.6.0.
 
 == Description ==
 
@@ -28,7 +28,7 @@ To configure the plugin, go in Settings > Hestia Nginx Cache and fill in the fie
 
 = How do I generate an API key =
 
-Run `v-generate-api-key` on your machine. Do note that API keys have *FULL* admin access.
+Log in as your user (*not* the super admin), then go into your user settings. Click on the "Access Key" button, and create a new access key with the `purge-nginx-cache` permission. *Make sure to save the secret key, as you will only see it once.*
 
 = Why does the plugin clear the cache multiple times? =
 
@@ -45,6 +45,10 @@ You can try to resolve the problem by purging the cache, deactivating the plugin
 If you are using Cloudflare and get an error when purging the cache, enter the hostname of the Hestia install in the settings, not the site URL.
 
 == Changelog ==
+
+= 2.0.0 =
+* Add support for the new Hestia API, released in 1.6.0.
+* Drop support for the legacy API, as it was quite unsecure for many reasons.
 
 = 1.2.2 =
 * Fix automatic purging.

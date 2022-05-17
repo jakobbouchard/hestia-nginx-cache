@@ -1,39 +1,40 @@
-(function ($) {
-	$(function () {
-		$("#wp-admin-bar-hestia-nginx-cache-manual-purge a").click(function (e) {
-			e.preventDefault();
-			const container = $("#hestia-nginx-cache-admin-notices");
-			$.post(
-				ajaxurl,
-				{
-					action: "hestia_nginx_cache_manual_purge",
-					wp_nonce: $.trim($("#hestia-nginx-cache-purge-wp-nonce").text()),
-				},
-				function (r) {
-					let response;
-					try {
-						response = JSON.parse(r);
-					} catch (error) {
-						response = { success: false, message: error };
-					}
-					let noticeClass = "notice-success";
-					if (!response.success) {
-						noticeClass = "notice-error";
-					}
-					let notice = $(
-						'<div class="notice ' +
-							noticeClass +
-							'"><p>' +
-							response.message +
-							"</p></div>"
-					);
-					container.append(notice);
-					notice.on("click", function () {
-						$(this).remove();
-					});
-					notice.delay(3000).fadeOut();
+window.addEventListener("DOMContentLoaded", (_event) => {
+	document
+		.querySelector("#wp-admin-bar-hestia-nginx-cache-manual-purge .ab-item")
+		.addEventListener("click", async (event) => {
+			event.preventDefault();
+			const container = document.querySelector("#hestia-nginx-cache-admin-notices");
+			const oldNotice = container.querySelector(".notice");
+			const notice = document.createElement("div");
+			notice.classList.add("notice");
+			notice.appendChild(document.createElement("p"));
+
+			try {
+				const res = await fetch(ajaxurl, {
+					method: "POST",
+					headers: { "Content-Type": "application/x-www-form-urlencoded" },
+					body: new URLSearchParams({
+						action: "hestia_nginx_cache_manual_purge",
+						wp_nonce: document.querySelector("#hestia-nginx-cache-purge-wp-nonce").textContent,
+					}),
+				});
+				if (!res.ok) {
+					notice.classList.add("notice-error");
+					notice.querySelector("p").textContent = "An error occured while purging the cache.";
+				} else {
+					const { success, data } = await res.clone().json();
+					notice.classList.add(success ? "notice-success" : "notice-error");
+					notice.querySelector("p").textContent = data.message;
 				}
-			);
+			} catch (error) {
+				console.error(error);
+				notice.classList.add("notice-error");
+				notice.querySelector("p").textContent = "An error occured while purging the cache.";
+			}
+
+			if (oldNotice) {
+				oldNotice.remove();
+			}
+			container.append(notice);
 		});
-	});
-})(jQuery);
+});
