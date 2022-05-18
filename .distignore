@@ -1,0 +1,8 @@
+/.wordpress-org
+/.git
+/.vscode
+/.github
+
+.distignore
+.gitignore
+.editorconfig
