@@ -10,13 +10,14 @@
 
 class Hestia_Nginx_Cache_Admin
 {
-	public const NAME = 'hestia-nginx-cache';
-
 	private $plugin = null;
 
 	public function __construct()
 	{
 		$this->plugin = Hestia_Nginx_Cache::get_instance();
+
+		// Add settings link to plugin actions.
+		add_filter('plugin_action_links_' . $this->plugin::$plugin_basename, array($this, 'settings_link'));
 
 		// Add settings page.
 		add_action('admin_init', array($this, 'register_settings'));
@@ -25,43 +26,58 @@ class Hestia_Nginx_Cache_Admin
 		// Add menu button
 		add_action('admin_print_styles', array($this, 'add_styles'));
 		add_action('admin_enqueue_scripts', array($this, 'add_scripts'));
-		add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
+		if ($this->plugin::$is_configured) {
+			add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
+		}
 
 		// Handle purge requests.
 		add_action('wp_ajax_hestia_nginx_cache_manual_purge', array($this, 'purge'));
 	}
 
+	function settings_link($links)
+	{
+		$url = esc_url(add_query_arg(
+			'page',
+			$this->plugin::NAME,
+			get_admin_url() . 'admin.php'
+		));
+
+		array_push($links, "<a href='$url'>" . __('Settings', $this->plugin::NAME) . '</a>');
+		return $links;
+	}
+
 	public function register_settings()
 	{
 		register_setting(
-			self::NAME,
-			self::NAME,
-			array('sanitize_callback' => array($this, 'hestia_nginx_options_validate'))
+			$this->plugin::NAME,
+			$this->plugin::NAME,
+			array('sanitize_callback' => array($this, 'validate_options'))
 		);
 
-		add_settings_section('api_settings', 'API Settings', array($this, 'hestia_nginx_section_text'), self::NAME);
+		add_settings_section('api_settings', 'API Settings', array($this, 'hestia_nginx_section_text'), $this->plugin::NAME);
 
-		add_settings_field('hestia_nginx_setting_host', 'Host', array($this, 'hestia_nginx_setting_host'), self::NAME, 'api_settings');
-		add_settings_field('hestia_nginx_setting_port', 'Port', array($this, 'hestia_nginx_setting_port'), self::NAME, 'api_settings');
-		add_settings_field('hestia_nginx_setting_api_key', 'API Key', array($this, 'hestia_nginx_setting_api_key'), self::NAME, 'api_settings');
-		add_settings_field('hestia_nginx_setting_user', 'Hestia User', array($this, 'hestia_nginx_setting_user'), self::NAME, 'api_settings');
+		add_settings_field('hestia_nginx_setting_host', 'Server hostname', array($this, 'setting_host'), $this->plugin::NAME, 'api_settings');
+		add_settings_field('hestia_nginx_setting_port', 'Server port', array($this, 'setting_port'), $this->plugin::NAME, 'api_settings');
+		add_settings_field('hestia_nginx_setting_access_key', 'Access key', array($this, 'setting_access_key'), $this->plugin::NAME, 'api_settings');
+		add_settings_field('hestia_nginx_setting_secret_key', 'Secret key', array($this, 'setting_secret_key'), $this->plugin::NAME, 'api_settings');
+		add_settings_field('hestia_nginx_setting_user', 'Hestia username', array($this, 'setting_user'), $this->plugin::NAME, 'api_settings');
+		add_settings_field('hestia_nginx_setting_domain', 'Domain to purge', array($this, 'setting_domain'), $this->plugin::NAME, 'api_settings');
 	}
 
-	public function hestia_nginx_options_validate($input)
+	public function validate_options($input)
 	{
-		$options = get_option(self::NAME);
+		$options = get_option($this->plugin::NAME);
 
 		$input['port'] = trim($input['port']);
-		$input['api_key'] = trim($input['api_key']);
+		$input['secret_key'] = trim($input['secret_key']);
+		$input['domain'] = parse_url($input['domain'], PHP_URL_HOST) ?: $input['domain'];
 
 		if (!preg_match('/^\d{1,5}$/i', $input['port'])) {
 			$input['port'] = '';
 		}
 
-		if ($input['api_key'] == 'you_really_thought_id_leave_it') {
-			$input['api_key'] = $options['api_key'];
-		} elseif (!preg_match('/^[a-z0-9-_]{32}$/i', $input['api_key'])) {
-			$input['api_key'] = '';
+		if ($input['secret_key'] == '#secret_key_PLACEHOLDER#') {
+			$input['secret_key'] = $options['secret_key'];
 		}
 
 		return $input;
@@ -69,41 +85,54 @@ class Hestia_Nginx_Cache_Admin
 
 	public function hestia_nginx_section_text()
 	{
-		echo '<p>Here you can set all the options for the API.</p>';
+		echo '<p>Here you can set all the options for the API. Please refer to the plugin\'s installation guide for information on how to generate an API key.</p>';
 	}
 
-	public function hestia_nginx_setting_host()
+	public function setting_host()
 	{
-		$options = get_option(self::NAME);
-		echo "<input id='hestia_nginx_setting_host' name='" . self::NAME . "[host]' type='text' value='" . esc_attr($options['host']) . "' required />";
+		$options = get_option($this->plugin::NAME);
+		echo '<input id="hestia_nginx_setting_host" name="' . $this->plugin::NAME . '[host]" type="text" value="' . esc_attr($options['host']) . '" required />';
 	}
 
-	public function hestia_nginx_setting_port()
+	public function setting_port()
 	{
-		$options = get_option(self::NAME);
-		echo "<input id='hestia_nginx_setting_port' name='" . self::NAME . "[port]' type='text' value='" . esc_attr($options['port']) . "' required />";
+		$options = get_option($this->plugin::NAME);
+		echo '<input id="hestia_nginx_setting_port" name="' . $this->plugin::NAME . '[port]" type="text" value="' . esc_attr($options['port']) . '" required />';
 	}
 
-	public function hestia_nginx_setting_api_key()
+	public function setting_access_key()
 	{
-		$options = get_option(self::NAME);
-		$api_key = $options['api_key'] ? 'you_really_thought_id_leave_it' : '';
-		echo "<input id='hestia_nginx_setting_api_key' name='" . self::NAME . "[api_key]' type='password' value='" . $api_key . "' required />";
+		$options = get_option($this->plugin::NAME);
+		echo '<input id="hestia_nginx_setting_access_key" name="' . $this->plugin::NAME . '[access_key]" type="text" value="' . esc_attr($options['access_key']) . '" required />';
 	}
 
-	public function hestia_nginx_setting_user()
+	public function setting_secret_key()
 	{
-		$options = get_option(self::NAME);
-		echo "<input id='hestia_nginx_setting_user' name='" . self::NAME . "[user]' type='text' value='" . esc_attr($options['user']) . "' required />";
+		$options = get_option($this->plugin::NAME);
+		$secret_key = $options['secret_key'] ? '#secret_key_PLACEHOLDER#' : '';
+		echo '<input id="hestia_nginx_setting_secret_key" name="' . $this->plugin::NAME . '[secret_key]" type="password" value="' . $secret_key . '" required />';
+	}
+
+	public function setting_user()
+	{
+		$options = get_option($this->plugin::NAME);
+		echo '<input id="hestia_nginx_setting_user" name="' . $this->plugin::NAME . '[user]" type="text" value="' . esc_attr($options['user']) . '" required />';
+	}
+
+	public function setting_domain()
+	{
+		$options = get_option($this->plugin::NAME);
+		$domain = $options['domain'] ? esc_attr($options['domain']) : parse_url(get_site_url(), PHP_URL_HOST);
+		echo '<input id="hestia_nginx_setting_domain" name="' . $this->plugin::NAME . '[domain]" type="text" value="' . $domain . '" required />';
 	}
 
 	public function add_settings_page()
 	{
 		add_options_page(
-			__('Hestia Nginx Cache', 'hestia-nginx-cache'),
-			__('Hestia Nginx Cache', 'hestia-nginx-cache'),
+			__('Hestia Nginx Cache', $this->plugin::NAME),
+			__('Hestia Nginx Cache', $this->plugin::NAME),
 			'manage_options',
-			self::NAME,
+			$this->plugin::NAME,
 			array($this, 'render_settings_page')
 		);
 	}
@@ -116,12 +145,14 @@ class Hestia_Nginx_Cache_Admin
 
 ?>
 		<div class="wrap">
-			<h1><?php esc_html_e('Hestia Nginx Cache', 'hestia-nginx-cache'); ?></h1>
+			<h1><?php esc_html_e('Hestia Nginx Cache', $this->plugin::NAME); ?></h1>
 
 			<form method="post" action="options.php">
-				<?php settings_fields(self::NAME);
-				do_settings_sections(self::NAME);
-				submit_button(); ?>
+				<?php
+				settings_fields($this->plugin::NAME);
+				do_settings_sections($this->plugin::NAME);
+				submit_button();
+				?>
 			</form>
 		</div>
 <?php
@@ -129,23 +160,21 @@ class Hestia_Nginx_Cache_Admin
 
 	public function add_scripts()
 	{
-		wp_register_script(self::NAME, plugins_url('assets/js/admin.js', dirname(__FILE__)));
-		wp_enqueue_script(self::NAME);
+		wp_register_script($this->plugin::NAME, plugins_url('assets/js/admin.js', dirname(__FILE__)));
+		wp_enqueue_script($this->plugin::NAME);
 	}
 
 	public function add_styles()
 	{
-		wp_register_style(self::NAME, plugins_url('assets/css/admin.css', dirname(__FILE__)));
-		wp_enqueue_style(self::NAME);
+		wp_register_style($this->plugin::NAME, plugins_url('assets/css/admin.css', dirname(__FILE__)));
+		wp_enqueue_style($this->plugin::NAME);
 	}
 
 	public function add_purge_button($wp_admin_bar)
 	{
 		$wp_admin_bar->add_node(array(
 			'id'    => 'hestia-nginx-cache-manual-purge',
-			'title' => __('Purge Hestia Nginx Cache', 'hestia-nginx-cache'),
-			'href'  => 'javascript:;',
-			'meta'  => array('title' => __('Purge Hestia Nginx Cache', 'hestia-nginx-cache'))
+			'title' => __('Purge Hestia Nginx Cache', $this->plugin::NAME),
 		));
 
 		add_action('admin_footer', array($this, 'embed_wp_nonce'));
@@ -154,33 +183,39 @@ class Hestia_Nginx_Cache_Admin
 
 	public function embed_wp_nonce()
 	{
-		echo '<span id="' . self::NAME . '-purge-wp-nonce' . '" class="hidden">'
-			. wp_create_nonce(self::NAME . '-purge-wp-nonce')
+		echo '<span id="' . $this->plugin::NAME . '-purge-wp-nonce' . '" class="hidden">'
+			. wp_create_nonce($this->plugin::NAME . '-purge-wp-nonce')
 			. '</span>';
 	}
 
 	public function embed_admin_notices()
 	{
-		echo '<div id="' . self::NAME . '-admin-notices"></div>';
+		echo '<div id="' . $this->plugin::NAME . '-admin-notices"></div>';
 	}
 
 	public function purge()
 	{
 		$result = $this->plugin->purge(true);
-
-		if (wp_verify_nonce($_POST['wp_nonce'], self::NAME . '-purge-wp-nonce') && !is_wp_error($result) && $result !== false) {
-			echo json_encode(array(
-				'success' => true,
-				'message' => __('The Hestia Nginx Cache was purged successfully.', 'hestia-nginx-cache')
-			));
-		} else {
-			echo json_encode(array(
-				'success' => false,
-				'message' => __('The Hestia Nginx Cache could not be purged!', 'hestia-nginx-cache'),
-				'error'   => is_wp_error($result) ? $result->get_error_message() : 'Options are missing'
-			));
+		if ($result) {
+			$exit_code = wp_remote_retrieve_header($result, 'Hestia-Exit-Code');
 		}
 
-		exit();
+		if (!$result || is_wp_error($result) || $exit_code != 0) {
+			$args = array('message'   => __('The Hestia Nginx Cache could not be purged!', $this->plugin::NAME));
+			if (is_wp_error($result)) {
+				$args['error'] = $result->get_error_message();
+			} elseif ($result === false) {
+				$args['error'] = 'Some options are missing.';
+			} elseif (isset($exit_code) && $exit_code != 0) {
+				$args['error'] = "Hestia exit code: $exit_code";
+			} else {
+				$args['error'] = 'Unknown error';
+			}
+			wp_send_json_error($args);
+		} elseif (wp_verify_nonce($_POST['wp_nonce'], $this->plugin::NAME . '-purge-wp-nonce')) {
+			wp_send_json_success(array(
+				'message' => __('The Hestia Nginx Cache was purged successfully.', $this->plugin::NAME)
+			));
+		}
 	}
 }

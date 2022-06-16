@@ -1,3 +1,6 @@
+li#wp-admin-bar-hestia-nginx-cache-manual-purge > .ab-item {
+	cursor: pointer;
+}
 li#wp-admin-bar-hestia-nginx-cache-manual-purge > .ab-item::before {
 	content: "\f515";
 }

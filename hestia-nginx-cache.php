@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       Hestia Nginx Cache
  * Description:       Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache when needed.
- * Version:           1.2.2
+ * Version:           2.0.0
  * Requires at least: 4.8
  * Requires PHP:      5.4
  * Author:            Jakob Bouchard
@@ -29,7 +29,8 @@ class Hestia_Nginx_Cache
 	public const NAME = 'hestia-nginx-cache';
 
 	private static $instance = null;
-	private $admin = null;
+	public static $plugin_basename = null;
+	public static $is_configured = false;
 
 	private $purge = false;
 
@@ -61,6 +62,11 @@ class Hestia_Nginx_Cache
 
 	private function __construct()
 	{
+		$this::$plugin_basename = plugin_basename(__FILE__);
+		$options = get_option(self::NAME);
+		if ($options && isset($options['access_key']) && $options['access_key'] != '' && isset($options['secret_key']) && $options['secret_key'] != '') {
+			$this::$is_configured = true;
+		}
 		add_action('init', array($this, 'init'));
 		add_action('shutdown', array($this, 'purge'));
 	}
@@ -76,7 +82,7 @@ class Hestia_Nginx_Cache
 
 	public function init()
 	{
-		load_plugin_textdomain('hestia-nginx-cache', false, 'hestia-nginx-cache/languages');
+		load_plugin_textdomain(self::NAME, false, self::NAME . '/languages');
 
 		if (is_admin()) {
 			require_once __DIR__ . '/includes/admin.php';
@@ -92,48 +98,38 @@ class Hestia_Nginx_Cache
 	{
 		$this->purge = true;
 	}
+
 	public function purge($force = false)
 	{
 		if ($this->purge !== true && !$force) {
 			return false;
 		}
 
-		$options = get_option(self::NAME);
-		if (!$options || !isset($options['api_key']) || $options['api_key'] == '') {
+		if (!$this::$is_configured) {
 			return false;
 		}
+		$options = get_option(self::NAME);
 
 		// Server credentials
 		$hostname = $options['host'];
 		$port = $options['port'];
-		$api_key = $options['api_key'];
+		$access_key = $options['access_key'];
+		$secret_key = $options['secret_key'];
 
 		// Info to purge
 		$username = $options['user'];
-		$domain = parse_url(get_site_url(), PHP_URL_HOST);
+		$domain = $options['domain'];
 
 		// Prepare POST query
 		$body = array(
-			'hash' => $api_key,
+			'hash' => "$access_key:$secret_key",
 			'returncode' => 'yes',
 			'cmd' => 'v-purge-nginx-cache',
 			'arg1' => $username,
 			'arg2' => $domain,
 		);
 
-		$args = array(
-			'body'        => $body,
-			'timeout'     => '5',
-			'redirection' => '5',
-			'httpversion' => '1.0',
-			'blocking'    => true,
-			'headers'     => array(),
-			'cookies'     => array(),
-		);
-
-		$response = wp_remote_post('https://' . $hostname . ':' . $port . '/api/', $args);
-
-		return $response;
+		return wp_remote_post("https://$hostname:$port/api/", array('body' => $body));
 	}
 }
 
