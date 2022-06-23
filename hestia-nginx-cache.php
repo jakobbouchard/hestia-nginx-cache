@@ -27,6 +27,7 @@ if (!defined('ABSPATH')) {
 class Hestia_Nginx_Cache
 {
 	public const NAME = 'hestia-nginx-cache';
+	public const VERSION = '2.1.0';
 
 	private static $instance = null;
 	public static $plugin_basename = null;
@@ -87,6 +88,9 @@ class Hestia_Nginx_Cache
 		if (is_admin()) {
 			require_once __DIR__ . '/includes/admin.php';
 			$this->admin = new Hestia_Nginx_Cache_Admin();
+
+			require_once __DIR__ . '/includes/site_health.php';
+			$this->site_health = new Hestia_Nginx_Cache_Site_Health();
 		}
 
 		foreach ($this->events as $event) {

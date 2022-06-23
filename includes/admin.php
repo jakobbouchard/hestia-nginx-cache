@@ -8,6 +8,10 @@
  * @license           GPL-3.0+
  */
 
+if (!defined('ABSPATH')) {
+	exit();
+}
+
 class Hestia_Nginx_Cache_Admin
 {
 	private $plugin = null;
