@@ -68,8 +68,9 @@ If your issues persist, do not hesitate to contact me via email!
 == Changelog ==
 
 = 2.1.0 =
-* Add a setting to disable the admin bar button
-* Add a setting to change the admin bar button's text
+* Add a setting to disable the admin bar button.
+* Add a setting to change the admin bar button's text.
+* Add a purge cache button in the settings page.
 
 = 2.0.0 =
 * Add support for the new Hestia API, released in 1.6.0.
