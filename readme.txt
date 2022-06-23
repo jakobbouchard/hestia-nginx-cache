@@ -4,7 +4,7 @@ Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
 Tested up to: 6.0
 Requires PHP: 5.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -55,7 +55,7 @@ Refer to the Installation tab for information on how to configure the plugin.
 
 = Can I manually purge the cache using the plugin? =
 
-Yes, you can. Once the plugin is installed and activated, you will see a "Purge Hestia Nginx Cache" button in the admin bar.
+Yes, you can. Once the plugin is installed and activated, you will see a "Purge Nginx Cache" button in the admin bar.
 
 = I am experiencing issues with the plugin. What do I do? =
 
@@ -66,6 +66,10 @@ If you are using Cloudflare and get an error when purging the cache, enter the h
 If your issues persist, do not hesitate to contact me via email!
 
 == Changelog ==
+
+= 2.1.0 =
+* Add a setting to disable the admin bar button
+* Add a setting to change the admin bar button's text
 
 = 2.0.0 =
 * Add support for the new Hestia API, released in 1.6.0.
