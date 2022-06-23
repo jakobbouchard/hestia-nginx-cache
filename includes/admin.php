@@ -173,6 +173,7 @@ class Hestia_Nginx_Cache_Admin
 				settings_fields($this->plugin::NAME);
 				do_settings_sections($this->plugin::NAME);
 				submit_button();
+				submit_button('Purge cache', 'delete', 'purge_cache', false);
 				?>
 			</form>
 		</div>
