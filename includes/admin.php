@@ -45,7 +45,7 @@ class Hestia_Nginx_Cache_Admin
 		$url = esc_url(add_query_arg(
 			'page',
 			$this->plugin::NAME,
-			get_admin_url() . 'admin.php'
+			get_admin_url() . 'options-general.php'
 		));
 
 		array_push($links, "<a href='$url'>" . __('Settings', $this->plugin::NAME) . '</a>');
