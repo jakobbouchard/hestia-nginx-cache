@@ -88,12 +88,12 @@ class Hestia_Nginx_Cache
 
 		if (is_admin()) {
 			// Do not allow logged in users / subscribers to clear cache
-			if ( current_user_can( 'edit_posts' )){
-			require_once __DIR__ . '/includes/admin.php';
-			$this->admin = new Hestia_Nginx_Cache_Admin();
+			if (current_user_can('edit_posts')) {
+				require_once __DIR__ . '/includes/admin.php';
+				$this->admin = new Hestia_Nginx_Cache_Admin();
 
-			require_once __DIR__ . '/includes/site_health.php';
-			$this->site_health = new Hestia_Nginx_Cache_Site_Health();
+				require_once __DIR__ . '/includes/site_health.php';
+				$this->site_health = new Hestia_Nginx_Cache_Site_Health();
 			}
 		}
 
@@ -112,10 +112,10 @@ class Hestia_Nginx_Cache
 		if ($this->purge !== true && !$force) {
 			return false;
 		}
-
 		if (!$this::$is_configured) {
 			return false;
 		}
+
 		$options = get_option(self::NAME);
 
 		// Server credentials

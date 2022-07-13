@@ -100,38 +100,44 @@ class Hestia_Nginx_Cache_Admin
 	public function api_setting_host()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo '<input id="api_setting_host" name="' . $this->plugin::NAME . '[host]" type="text" value="' . esc_attr($options['host']) . '" required />';
+		$host = $this->plugin::$is_configured ? esc_attr($options["host"]) : "";
+		echo '<input id="api_setting_host" name="' . $this->plugin::NAME . '[host]" type="text" value="' . $host . '" required />';
 	}
 
 	public function api_setting_port()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo '<input id="api_setting_port" name="' . $this->plugin::NAME . '[port]" type="text" value="' . esc_attr($options['port']) . '" required />';
+		$port = $this->plugin::$is_configured ? esc_attr($options["port"]) : "";
+		echo '<input id="api_setting_port" name="' . $this->plugin::NAME . '[port]" type="text" value="' . $port . '" required />';
 	}
 
 	public function api_setting_access_key()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo '<input id="api_setting_access_key" name="' . $this->plugin::NAME . '[access_key]" type="text" value="' . esc_attr($options['access_key']) . '" required />';
+		$access_key = $this->plugin::$is_configured ? esc_attr($options["access_key"]) : "";
+		echo '<input id="api_setting_access_key" name="' . $this->plugin::NAME . '[access_key]" type="text" value="' . $access_key . '" required />';
 	}
 
 	public function api_setting_secret_key()
 	{
 		$options = get_option($this->plugin::NAME);
-		$secret_key = $options['secret_key'] ? '#secret_key_PLACEHOLDER#' : '';
+		$secret_key = $this->plugin::$is_configured ? $options["secret_key"] : "";
+		$secret_key = $secret_key != "" ? '#secret_key_PLACEHOLDER#' : '';
 		echo '<input id="api_setting_secret_key" name="' . $this->plugin::NAME . '[secret_key]" type="password" value="' . $secret_key . '" required />';
 	}
 
 	public function api_setting_user()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo '<input id="api_setting_user" name="' . $this->plugin::NAME . '[user]" type="text" value="' . esc_attr($options['user']) . '" required />';
+		$user = $this->plugin::$is_configured ? esc_attr($options["user"]) : "";
+		echo '<input id="api_setting_user" name="' . $this->plugin::NAME . '[user]" type="text" value="' . $user . '" required />';
 	}
 
 	public function api_setting_domain()
 	{
 		$options = get_option($this->plugin::NAME);
-		$domain = $options['domain'] ? esc_attr($options['domain']) : parse_url(get_site_url(), PHP_URL_HOST);
+		$domain = $this->plugin::$is_configured ? esc_attr($options["host"]) : "";
+		$domain = $domain != "" ? $domain : parse_url(get_site_url(), PHP_URL_HOST);
 		echo '<input id="api_setting_domain" name="' . $this->plugin::NAME . '[domain]" type="text" value="' . $domain . '" required />';
 	}
 
@@ -143,13 +149,15 @@ class Hestia_Nginx_Cache_Admin
 	public function plugin_setting_show_purge_button()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo '<input id="plugin_setting_show_purge_button" name="' . $this->plugin::NAME . '[show_adminbar_button]" type="checkbox" value="1" ' . checked(1, $options['show_adminbar_button'], false) . ' />';
+		$show_adminbar_button = $this->plugin::$is_configured ? $options["show_adminbar_button"] : false;
+		echo '<input id="plugin_setting_show_purge_button" name="' . $this->plugin::NAME . '[show_adminbar_button]" type="checkbox" value="1" ' . checked(1, $show_adminbar_button, false) . ' />';
 	}
 
 	public function plugin_setting_purge_button_text()
 	{
 		$options = get_option($this->plugin::NAME);
-		echo '<input id="plugin_setting_purge_button_text" placeholder="Empty for default" name="' . $this->plugin::NAME . '[adminbar_button_text]" type="text" value="' . esc_attr($options['adminbar_button_text']) . '" />';
+		$adminbar_button_text = $this->plugin::$is_configured ? esc_attr($options["adminbar_button_text"]) : "";
+		echo '<input id="plugin_setting_purge_button_text" placeholder="Empty for default" name="' . $this->plugin::NAME . '[adminbar_button_text]" type="text" value="' . $adminbar_button_text . '" />';
 	}
 
 	public function add_settings_page()
@@ -202,7 +210,7 @@ class Hestia_Nginx_Cache_Admin
 
 		$wp_admin_bar->add_node(array(
 			'id'    => 'hestia-nginx-cache-manual-purge',
-			'title' => $options['adminbar_button_text'] ? $options['adminbar_button_text'] : __('Purge Nginx Cache', $this->plugin::NAME),
+			'title' => $this->plugin::$is_configured && $options['adminbar_button_text'] ? $options['adminbar_button_text'] : __('Purge Nginx Cache', $this->plugin::NAME),
 		));
 
 		add_action('admin_footer', array($this, 'embed_wp_nonce'));

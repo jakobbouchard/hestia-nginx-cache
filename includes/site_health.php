@@ -40,7 +40,6 @@ class Hestia_Nginx_Cache_Site_Health
 	 */
 	public function register_debug_information($debug_info)
 	{
-		$options = get_option($this->plugin::NAME);
 
 		$debug_info[$this->plugin::NAME] = [
 			'label'  => esc_html__('Hestia Nginx Cache', 'hestia-nginx-cache'),
@@ -57,6 +56,8 @@ class Hestia_Nginx_Cache_Site_Health
 		];
 
 		if ($this->plugin::$is_configured) {
+			$options = get_option($this->plugin::NAME);
+
 			$debug_info[$this->plugin::NAME]['fields']['host'] = [
 				'label' => esc_html__('Server hostname', 'hestia-nginx-cache'),
 				'value' => $options['host']
