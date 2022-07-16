@@ -136,7 +136,7 @@ class Hestia_Nginx_Cache_Admin
 	public function api_setting_domain()
 	{
 		$options = get_option($this->plugin::NAME);
-		$domain = $this->plugin::$is_configured ? esc_attr($options["host"]) : "";
+		$domain = $this->plugin::$is_configured ? esc_attr($options["domain"]) : "";
 		$domain = $domain != "" ? $domain : parse_url(get_site_url(), PHP_URL_HOST);
 		echo '<input id="api_setting_domain" name="' . $this->plugin::NAME . '[domain]" type="text" value="' . $domain . '" required />';
 	}
