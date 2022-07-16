@@ -137,7 +137,7 @@ class Hestia_Nginx_Cache
 			'arg2' => $domain,
 		);
 
-		return wp_remote_post("https://$hostname:$port/api/", array('body' => $body));
+		return wp_remote_post("https://$hostname:$port/api/", array('sslverify' => false, 'timeout' => 60, 'body' => $body));
 	}
 }
 
