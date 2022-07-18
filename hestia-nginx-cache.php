@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
 class Hestia_Nginx_Cache
 {
 	public const NAME = 'hestia-nginx-cache';
-	public const VERSION = '2.1.3';
+	public const VERSION = '2.1.4';
 
 	private static $instance = null;
 	public static $plugin_basename = null;
