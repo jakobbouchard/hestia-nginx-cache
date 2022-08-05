@@ -1,0 +1,20 @@
+name: Update assets
+on:
+  push:
+    branches:
+      - "stable"
+
+jobs:
+  tag:
+    name: Push on stable
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: WordPress Plugin Assets Update
+        id: deploy
+        # TOOD: Use stable tag once their bug fix is through
+        uses: 10up/action-wordpress-plugin-asset-update@develop
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
