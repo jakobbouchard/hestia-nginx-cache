@@ -1,8 +1,9 @@
 === Hestia Nginx Cache ===
 Contributors: jakobbouchard, jaapmarcus
+Donate link: https://ko-fi.com/jakobbouchard
 Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.4
 Stable tag: 2.1.4
 License: GPL v3
