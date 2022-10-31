@@ -13,8 +13,7 @@ jobs:
         uses: actions/checkout@v2
       - name: WordPress Plugin Assets Update
         id: deploy
-        # TOOD: Use stable tag once their bug fix is through
-        uses: 10up/action-wordpress-plugin-asset-update@develop
+        uses: 10up/action-wordpress-plugin-asset-update@stable
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
