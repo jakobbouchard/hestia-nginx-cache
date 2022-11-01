@@ -22,16 +22,25 @@ class Hestia_Nginx_Cache_Admin
 
 		$options = get_option($this->plugin::NAME);
 
-		// Add settings link to plugin actions.
-		add_filter('plugin_action_links_' . $this->plugin::$plugin_basename, array($this, 'settings_link'));
+		if (is_admin()) {
+			// Add settings link to plugin actions.
+			add_filter('plugin_action_links_' . $this->plugin::$plugin_basename, array($this, 'settings_link'));
 
-		// Add settings page.
-		add_action('admin_init', array($this, 'register_settings'));
-		add_action('admin_menu', array($this, 'add_settings_page'));
+			// Add settings page.
+			add_action('admin_init', array($this, 'register_settings'));
+			add_action('admin_menu', array($this, 'add_settings_page'));
 
-		// Add menu button
-		add_action('admin_print_styles', array($this, 'add_styles'));
-		add_action('admin_enqueue_scripts', array($this, 'add_scripts'));
+			// Add menu button
+			add_action('admin_enqueue_scripts', array($this, 'add_scripts_and_styles'));
+			add_action('admin_footer', array($this, 'embed_wp_nonce'));
+			add_action('admin_notices', array($this, 'embed_admin_notices'));
+		} else {
+
+			// Add menu button
+			add_action('wp_enqueue_scripts', array($this, 'add_scripts_and_styles'));
+			add_action('wp_footer', array($this, 'embed_wp_nonce'));
+		}
+
 		if ($this->plugin::$is_configured && $options['show_adminbar_button']) {
 			add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
 		}
@@ -192,16 +201,20 @@ class Hestia_Nginx_Cache_Admin
 <?php
 	}
 
-	public function add_scripts()
-	{
-		wp_register_script($this->plugin::NAME, plugins_url('assets/js/admin.js', dirname(__FILE__)));
-		wp_enqueue_script($this->plugin::NAME);
-	}
-
-	public function add_styles()
+	public function add_scripts_and_styles()
 	{
 		wp_register_style($this->plugin::NAME, plugins_url('assets/css/admin.css', dirname(__FILE__)));
 		wp_enqueue_style($this->plugin::NAME);
+
+		wp_register_script($this->plugin::NAME, plugins_url('assets/js/admin.js', dirname(__FILE__)));
+		wp_enqueue_script($this->plugin::NAME);
+		if (!is_admin()) {
+			wp_localize_script(
+				$this->plugin::NAME,
+				'ajaxurl',
+				admin_url('admin-ajax.php')
+			);
+		}
 	}
 
 	public function add_purge_button($wp_admin_bar)
@@ -212,9 +225,6 @@ class Hestia_Nginx_Cache_Admin
 			'id'    => 'hestia-nginx-cache-manual-purge',
 			'title' => $this->plugin::$is_configured && $options['adminbar_button_text'] ? $options['adminbar_button_text'] : __('Purge Nginx Cache', $this->plugin::NAME),
 		));
-
-		add_action('admin_footer', array($this, 'embed_wp_nonce'));
-		add_action('admin_notices', array($this, 'embed_admin_notices'));
 	}
 
 	public function embed_wp_nonce()

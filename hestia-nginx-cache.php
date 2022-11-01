@@ -86,15 +86,16 @@ class Hestia_Nginx_Cache
 	{
 		load_plugin_textdomain(self::NAME, false, self::NAME . '/languages');
 
+		// Register site_health
 		if (is_admin()) {
-			// Do not allow logged in users / subscribers to clear cache
-			if (current_user_can('edit_posts')) {
-				require_once __DIR__ . '/includes/admin.php';
-				$this->admin = new Hestia_Nginx_Cache_Admin();
+			require_once __DIR__ . '/includes/site_health.php';
+			$this->site_health = new Hestia_Nginx_Cache_Site_Health();
+		}
 
-				require_once __DIR__ . '/includes/site_health.php';
-				$this->site_health = new Hestia_Nginx_Cache_Site_Health();
-			}
+		// Do not allow logged in users / subscribers to clear cache
+		if (current_user_can('edit_posts')) {
+			require_once __DIR__ . '/includes/admin.php';
+			$this->admin = new Hestia_Nginx_Cache_Admin();
 		}
 
 		foreach ($this->events as $event) {

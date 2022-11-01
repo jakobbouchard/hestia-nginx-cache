@@ -1,41 +1,53 @@
-window.addEventListener("DOMContentLoaded", (_event) => {
-	const purge = async (event) => {
-		event.preventDefault();
+window.addEventListener("DOMContentLoaded", (_evt) => {
+	/**
+	 * @param {Response|Error} resOrError
+	 */
+	async function showNotice(resOrError) {
 		const container = document.querySelector("#hestia-nginx-cache-admin-notices");
-		const oldNotice = container.querySelector(".notice");
-		const notice = document.createElement("div");
-		notice.classList.add("notice");
-		notice.appendChild(document.createElement("p"));
-
-		try {
-			const res = await fetch(ajaxurl, {
-				method: "POST",
-				headers: { "Content-Type": "application/x-www-form-urlencoded" },
-				body: new URLSearchParams({
-					action: "hestia_nginx_cache_manual_purge",
-					wp_nonce: document.querySelector("#hestia-nginx-cache-purge-wp-nonce").textContent,
-				}),
-			});
-			if (!res.ok) {
-				notice.classList.add("notice-error");
-				notice.querySelector("p").textContent = "The Hestia Nginx Cache could not be purged!";
-			} else {
-				const { success, data } = await res.clone().json();
-				notice.classList.add(success ? "notice-success" : "notice-error");
-				notice.querySelector("p").textContent = data.message;
-			}
-		} catch (error) {
-			console.error(error);
-			notice.classList.add("notice-error");
-			notice.querySelector("p").textContent = "The Hestia Nginx Cache could not be purged!";
-		} finally {
-			if (oldNotice) {
-				oldNotice.remove();
-			}
-			container.append(notice);
+		if (!container) {
+			return;
 		}
-	};
+		const oldNotice = container.querySelector(".notice");
+		const newNotice = document.createElement("div");
+		const newNoticeBody = newNotice.appendChild(document.createElement("p"));
 
-	document.querySelector("#wp-admin-bar-hestia-nginx-cache-manual-purge .ab-item")?.addEventListener("click", purge);
-	document.querySelector(".settings_page_hestia-nginx-cache input#purge_cache")?.addEventListener("click", purge);
+		if (!resOrError.ok) {
+			console.error(resOrError);
+			newNotice.classList.add("notice", "notice-error");
+			newNoticeBody.textContent = "The Hestia Nginx Cache could not be purged!";
+		} else {
+			const { success, data } = await resOrError.clone().json();
+			newNotice.classList.add("notice", success ? "notice-success" : "notice-error");
+			newNoticeBody.textContent = data.message;
+		}
+
+		oldNotice?.remove();
+		container.append(newNotice);
+	}
+
+	/**
+	 * @param {Event} evt
+	 */
+	async function purge(evt) {
+		evt.preventDefault();
+		const nonce = document.querySelector("#hestia-nginx-cache-purge-wp-nonce");
+
+		fetch(ajaxurl, {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: new URLSearchParams({
+				action: "hestia_nginx_cache_manual_purge",
+				wp_nonce: nonce.textContent,
+			}),
+		})
+			.then(showNotice)
+			.catch(showNotice);
+	}
+
+	document
+		.querySelector("#wp-admin-bar-hestia-nginx-cache-manual-purge .ab-item")
+		?.addEventListener("click", purge);
+	document
+		.querySelector(".settings_page_hestia-nginx-cache input#purge_cache")
+		?.addEventListener("click", purge);
 });
