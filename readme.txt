@@ -5,7 +5,7 @@ Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
 Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 2.1.4
+Stable tag: 2.2.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -67,6 +67,9 @@ If you are using Cloudflare and get an error when purging the cache, enter the h
 If your issues persist, do not hesitate to contact me via email!
 
 == Changelog ==
+
+= 2.2.0 =
+* Show button on the frontend when logged in.
 
 = 2.1.4 =
 * Fix domain field in admin
