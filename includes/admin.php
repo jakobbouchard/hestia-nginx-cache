@@ -229,7 +229,7 @@ class Hestia_Nginx_Cache_Admin
 
 	public function embed_wp_nonce()
 	{
-		echo '<span id="' . $this->plugin::NAME . '-purge-wp-nonce' . '" class="hidden">'
+		echo '<span id="' . $this->plugin::NAME . '-purge-wp-nonce' . '">'
 			. wp_create_nonce($this->plugin::NAME . '-purge-wp-nonce')
 			. '</span>';
 	}
