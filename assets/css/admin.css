@@ -4,3 +4,6 @@ li#wp-admin-bar-hestia-nginx-cache-manual-purge > .ab-item {
 li#wp-admin-bar-hestia-nginx-cache-manual-purge > .ab-item::before {
 	content: "\f515";
 }
+#hestia-nginx-cache-purge-wp-nonce {
+	display: none;
+}
