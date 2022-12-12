@@ -13,6 +13,8 @@ Purge Nginx cache automatically after making website changes. Uses the *new* Hes
 
 == Description ==
 
+**Important**: Hestia 1.6.12 fixes an issue where purging the cache could make the website unavailable, resulting in a 502 error. If you aren't using this version, please upgrade!
+
 This plugin automatically purges the Nginx cache after you make a website change such as updating a post or changing your theme.
 
 You also have the ability to manually purge the cache using a button in the WordPress admin bar.
