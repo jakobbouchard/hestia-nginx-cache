@@ -41,7 +41,7 @@ class Hestia_Nginx_Cache_Admin
 			add_action('wp_footer', array($this, 'embed_wp_nonce'));
 		}
 
-		if ($this->plugin::$is_configured && $options['show_adminbar_button']) {
+		if ($this->plugin::$is_configured && key_exists('show_adminbar_button', $options) && $options['show_adminbar_button']) {
 			add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
 		}
 
