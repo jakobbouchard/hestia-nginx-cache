@@ -210,9 +210,11 @@ class Hestia_Nginx_Cache_Admin
 		wp_enqueue_script($this->plugin::NAME);
 		if (!is_admin()) {
 			wp_localize_script(
-				$this->plugin::NAME,
-				'ajaxurl',
-				admin_url('admin-ajax.php')
+			    $this->plugin::NAME,
+			    'ajaxurl',
+			    array(
+			        'ajax_url' => admin_url('admin-ajax.php')
+			    )
 			);
 		}
 	}
