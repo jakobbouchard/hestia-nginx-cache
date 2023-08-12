@@ -34,6 +34,9 @@ class Hestia_Nginx_Cache
 	public static $plugin_basename = null;
 	public static $is_configured = false;
 
+	public $admin = null;
+	public $site_health = null;
+
 	private $purge = false;
 
 	private $events = array(
