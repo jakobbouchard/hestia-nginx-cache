@@ -3,7 +3,7 @@ Contributors: jakobbouchard, jaapmarcus
 Donate link: https://github.com/sponsors/jakobbouchard
 Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 5.4
 Stable tag: 2.2.3
 License: GPL v3
