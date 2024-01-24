@@ -40,6 +40,7 @@ class Hestia_Nginx_Cache
 	private $purge = false;
 
 	private $events = array(
+		'publish_post',
 		'edit_post',
 		'save_post',
 		'post_updated',
