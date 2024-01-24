@@ -212,9 +212,8 @@ class Hestia_Nginx_Cache_Admin
 			wp_localize_script(
 			    $this->plugin::NAME,
 			    'ajaxurl',
-			    array(
-			        'ajax_url' => admin_url('admin-ajax.php')
-			    )
+			    admin_url('admin-ajax.php')
+
 			);
 		}
 	}
