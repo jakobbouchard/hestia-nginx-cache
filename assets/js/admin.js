@@ -5,6 +5,13 @@ window.addEventListener("DOMContentLoaded", (_evt) => {
 	async function showNotice(resOrError) {
 		const container = document.querySelector("#hestia-nginx-cache-admin-notices");
 		if (!container) {
+			if(!resOrError.ok){
+				console.error(resOrError);
+				alert('The Hestia Nginx Cache could not be purged!');
+			}else{
+				const { success, data } = await resOrError.clone().json();
+				alert(data.message);
+			}
 			return;
 		}
 		const oldNotice = container.querySelector(".notice");
