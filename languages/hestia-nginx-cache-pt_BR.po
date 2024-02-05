@@ -3,28 +3,33 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hestia Nginx Cache 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hestia-nginx-cache\n"
-"Last-Translator: Maison da Silva <maisondasilva.com.br>\n"
-"Language-Team: maisondasilva <maisondasilva.com.br>\n"
-"Language: pt-BR\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hestia-nginx-"
+"cache\n"
+"Last-Translator: Maison da Silva\n"
+"Language-Team: Português do Brasil\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-09-17T15:33:57-04:00\n"
-"PO-Revision-Date: 2024-01-25 00:22-0300\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"PO-Revision-Date: 2024-01-27 14:41+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hestia-nginx-cache\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.6.6; wp-6.4.2"
 
 #. Plugin Name of the plugin
-#: includes/admin.php:75
-#: includes/admin.php:76
-#: includes/admin.php:90
+#: includes/admin.php:75 includes/admin.php:76 includes/admin.php:90
 msgid "Hestia Nginx Cache"
 msgstr "Hestia Nginx Cache"
 
 #. Description of the plugin
-msgid "Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache when needed."
-msgstr "Integração de Hestia Nginx Cache para WordPress. Limpa automaticamente o cache Nginx quando necessário."
+msgid ""
+"Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache "
+"when needed."
+msgstr ""
+"Integração de Hestia Nginx Cache para WordPress. Limpa automaticamente o "
+"cache Nginx quando necessário."
 
 #. Author of the plugin
 msgid "Jakob Bouchard"
@@ -34,8 +39,7 @@ msgstr "Jakob Bouchard"
 msgid "https://jakobbouchard.dev"
 msgstr "https://jakobbouchard.dev"
 
-#: includes/admin.php:114
-#: includes/admin.php:116
+#: includes/admin.php:114 includes/admin.php:116
 msgid "Purge Hestia Nginx Cache"
 msgstr "Limpar Cache do Nginx Hestia Cache"
 
