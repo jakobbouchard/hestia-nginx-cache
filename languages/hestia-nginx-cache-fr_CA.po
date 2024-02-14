@@ -94,17 +94,16 @@ msgid "Admin bar button text"
 msgstr "Texte du bouton de la barre d'administration"
 
 #: includes/admin.php:106
-msgid ""
-"lease refer to the plugin's installation guide for information on how to"
-"generate an API key."
-msgstr ""
-"Ici, vous pouvez définir tous les réglages de l'API. Veuillez vous référer "
-"au guide d'installation de l'extension pour plus d'informations sur la façon "
-"de générer une clé API."
+msgid "Please refer to the plugin's installation guide for information on how to generate an API key."
+msgstr "Veuillez vous référer au guide d'installation de l'extension pour plus d'informations sur la façon de générer une clé API."
 
 #: includes/admin.php:155
 msgid "Settings for the plugin."
 msgstr "Options pour l'extension."
+
+#: includes/admin.php:169
+msgid "Leave empty for default"
+msgstr "Laisser vide pour le texte par défaut"
 
 #: includes/admin.php:197 includes/admin.php:231
 msgid "Purge Nginx Cache"
