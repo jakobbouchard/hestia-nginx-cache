@@ -2,27 +2,21 @@ window.addEventListener("DOMContentLoaded", (_evt) => {
 	/**
 	 * @param {Response|Error} resOrError
 	 */
-	async function showNotice(resOrError) {
+	async function showNotice(message, success = false) {
 		const container = document.querySelector("#hestia-nginx-cache-admin-notices");
 		if (!container) {
 			return;
 		}
-		const oldNotice = container.querySelector(".notice");
-		const newNotice = document.createElement("div");
-		const newNoticeBody = newNotice.appendChild(document.createElement("p"));
-
-		if (!resOrError.ok) {
-			console.error(resOrError);
-			newNotice.classList.add("notice", "notice-error");
-			newNoticeBody.textContent = "The Hestia Nginx Cache could not be purged!";
+		let notice = container.querySelector(".notice");
+		if (notice) {
+			notice.classList.value = `notice ${success ? "notice-success" : "notice-error"}`;
+			notice.querySelector("p").textContent = message;
 		} else {
-			const { success, data } = await resOrError.clone().json();
-			newNotice.classList.add("notice", success ? "notice-success" : "notice-error");
-			newNoticeBody.textContent = data.message;
+			notice = document.createElement("div");
+			notice.classList.add("notice", success ? "notice-success" : "notice-error");
+			notice.appendChild(document.createElement("p")).textContent = message;
+			container.appendChild(notice);
 		}
-
-		oldNotice?.remove();
-		container.append(newNotice);
 	}
 
 	/**
@@ -32,16 +26,27 @@ window.addEventListener("DOMContentLoaded", (_evt) => {
 		evt.preventDefault();
 		const nonce = document.querySelector("#hestia-nginx-cache-purge-wp-nonce");
 
-		fetch(ajaxurl, {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: new URLSearchParams({
-				action: "hestia_nginx_cache_manual_purge",
-				wp_nonce: nonce.textContent,
-			}),
-		})
-			.then(showNotice)
-			.catch(showNotice);
+		try {
+			const result = await fetch(ajaxurl, {
+				method: "POST",
+				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				body: new URLSearchParams({
+					action: "hestia_nginx_cache_manual_purge",
+					wp_nonce: nonce.textContent,
+				}),
+			});
+
+			if (!result.ok) {
+				console.error(result);
+				showNotice(hestia_nginx_cache.could_not_purge);
+			} else {
+				const { success, data } = await result.clone().json();
+				showNotice(data.message, success);
+			}
+		} catch (error) {
+			console.error(error);
+			showNotice(hestia_nginx_cache.could_not_purge);
+		}
 	}
 
 	document

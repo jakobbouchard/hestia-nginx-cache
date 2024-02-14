@@ -11,7 +11,7 @@
  * Plugin Name:       Hestia Nginx Cache
  * Description:       Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache when needed.
  * Plugin URI:				https://github.com/jakobbouchard/hestia-nginx-cache
- * Version:           2.2.3
+ * Version:           2.2.4
  * Requires at least: 4.8
  * Requires PHP:      5.4
  * Author:            Jakob Bouchard
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
 class Hestia_Nginx_Cache
 {
 	public const NAME = 'hestia-nginx-cache';
-	public const VERSION = '2.2.3';
+	public const VERSION = '2.2.4';
 
 	private static $instance = null;
 	public static $plugin_basename = null;
@@ -39,7 +39,7 @@ class Hestia_Nginx_Cache
 
 	private $purge = false;
 
-	private $events = array(
+	private $events = [
 		'publish_post',
 		'edit_post',
 		'save_post',
@@ -64,7 +64,7 @@ class Hestia_Nginx_Cache
 		'wp_update_nav_menu',
 		'switch_theme',
 		'permalink_structure_changed',
-	);
+	];
 
 	private function __construct()
 	{
@@ -73,8 +73,8 @@ class Hestia_Nginx_Cache
 		if ($options && isset($options['access_key']) && $options['access_key'] != '' && isset($options['secret_key']) && $options['secret_key'] != '') {
 			$this::$is_configured = true;
 		}
-		add_action('init', array($this, 'init'));
-		add_action('shutdown', array($this, 'purge'));
+		add_action('init', [$this, 'init']);
+		add_action('shutdown', [$this, 'purge']);
 	}
 
 	public static function get_instance()
@@ -103,7 +103,7 @@ class Hestia_Nginx_Cache
 		}
 
 		foreach ($this->events as $event) {
-			add_action($event, array($this, 'consolidate_purge'));
+			add_action($event, [$this, 'consolidate_purge']);
 		}
 	}
 
@@ -134,15 +134,15 @@ class Hestia_Nginx_Cache
 		$domain = $options['domain'];
 
 		// Prepare POST query
-		$body = array(
+		$body = [
 			'hash' => "$access_key:$secret_key",
 			'returncode' => 'yes',
 			'cmd' => 'v-purge-nginx-cache',
 			'arg1' => $username,
 			'arg2' => $domain,
-		);
+		];
 
-		return wp_remote_post("https://$hostname:$port/api/", array('sslverify' => false, 'timeout' => 60, 'body' => $body));
+		return wp_remote_post("https://$hostname:$port/api/", ['sslverify' => false, 'timeout' => 60, 'body' => $body]);
 	}
 }
 

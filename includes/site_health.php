@@ -25,7 +25,7 @@ class Hestia_Nginx_Cache_Site_Health
 	{
 		$this->plugin = Hestia_Nginx_Cache::get_instance();
 
-		add_filter('debug_information', array($this, 'register_debug_information'));
+		add_filter('debug_information', [$this, 'register_debug_information']);
 	}
 
 	/**
@@ -40,7 +40,6 @@ class Hestia_Nginx_Cache_Site_Health
 	 */
 	public function register_debug_information($debug_info)
 	{
-
 		$debug_info[$this->plugin::NAME] = [
 			'label'  => esc_html__('Hestia Nginx Cache', 'hestia-nginx-cache'),
 			'fields' => [
@@ -48,9 +47,9 @@ class Hestia_Nginx_Cache_Site_Health
 					'label' => esc_html__('Version', 'hestia-nginx-cache'),
 					'value' => $this->plugin::VERSION,
 				],
-				'configured' => [
-					'label' => esc_html__('Configured', 'hestia-nginx-cache'),
-					'value' => 'The plugin has ' . ($this->plugin::$is_configured ? '' : 'not') . ' been configured',
+				'is_configured' => [
+					'label' => esc_html__('Configuration', 'hestia-nginx-cache'),
+					'value' => $this->plugin::$is_configured ? esc_html__('The plugin has been configured', 'hestia-nginx-cache') : esc_html__('The plugin has not been configured', 'hestia-nginx-cache'),
 				],
 			],
 		];
