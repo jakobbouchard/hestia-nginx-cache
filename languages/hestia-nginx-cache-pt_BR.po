@@ -95,12 +95,8 @@ msgid "Admin bar button text"
 msgstr "Texto do botão na barra de administração"
 
 #: includes/admin.php:106
-msgid ""
-"Please refer to the plugin's installation guide for information on how to "
-"generate an API key."
-msgstr ""
-"Por favor, consulte o guia de instalação do plugin para obter informações "
-"sobre como gerar uma chave de API."
+msgid "Please refer to the plugin's installation guide for information on how to generate an API key."
+msgstr "Por favor, consulte o guia de instalação do plugin para obter informações sobre como gerar uma chave de API."
 
 #: includes/admin.php:155
 msgid "Settings for the plugin."
