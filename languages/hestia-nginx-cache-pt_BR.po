@@ -17,7 +17,6 @@ msgstr ""
 "PO-Revision-Date: 2024-02-17 04:04+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hestia-nginx-cache\n"
-"X-Loco-Version: 2.6.6; wp-6.4.3"
 
 #. Plugin Name of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php 
@@ -33,12 +32,8 @@ msgstr "https://github.com/jakobbouchard/hestia-nginx-cache"
 
 #. Description of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php
-msgid ""
-"Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache "
-"when needed."
-msgstr ""
-"Integração de Hestia Nginx Cache para WordPress. Limpa automaticamente o "
-"cache Nginx quando necessário."
+msgid "Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache when needed."
+msgstr "Integração de Hestia Nginx Cache para WordPress. Limpa automaticamente o cache Nginx quando necessário."
 
 #. Author of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php
