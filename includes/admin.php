@@ -24,29 +24,29 @@ class Hestia_Nginx_Cache_Admin
 
 		if (is_admin()) {
 			// Add settings link to plugin actions.
-			add_filter('plugin_action_links_' . $this->plugin::$plugin_basename, array($this, 'settings_link'));
+			add_filter('plugin_action_links_' . $this->plugin::$plugin_basename, [$this, 'settings_link']);
 
 			// Add settings page.
-			add_action('admin_init', array($this, 'register_settings'));
-			add_action('admin_menu', array($this, 'add_settings_page'));
+			add_action('admin_init', [$this, 'register_settings']);
+			add_action('admin_menu', [$this, 'add_settings_page']);
 
 			// Add menu button
-			add_action('admin_enqueue_scripts', array($this, 'add_scripts_and_styles'));
-			add_action('admin_footer', array($this, 'embed_wp_nonce'));
-			add_action('admin_notices', array($this, 'embed_admin_notices'));
+			add_action('admin_enqueue_scripts', [$this, 'add_scripts_and_styles']);
+			add_action('admin_footer', [$this, 'embed_wp_nonce']);
+			add_action('admin_notices', [$this, 'embed_admin_notices']);
 		} else {
 
 			// Add menu button
-			add_action('wp_enqueue_scripts', array($this, 'add_scripts_and_styles'));
-			add_action('wp_footer', array($this, 'embed_wp_nonce'));
+			add_action('wp_enqueue_scripts', [$this, 'add_scripts_and_styles']);
+			add_action('wp_footer', [$this, 'embed_wp_nonce']);
 		}
 
 		if ($this->plugin::$is_configured && key_exists('show_adminbar_button', $options) && $options['show_adminbar_button']) {
-			add_action('admin_bar_menu', array($this, 'add_purge_button'), PHP_INT_MAX);
+			add_action('admin_bar_menu', [$this, 'add_purge_button'], PHP_INT_MAX);
 		}
 
 		// Handle purge requests.
-		add_action('wp_ajax_hestia_nginx_cache_manual_purge', array($this, 'purge'));
+		add_action('wp_ajax_hestia_nginx_cache_manual_purge', [$this, 'purge']);
 	}
 
 	function settings_link($links)
@@ -57,7 +57,7 @@ class Hestia_Nginx_Cache_Admin
 			get_admin_url() . 'options-general.php'
 		));
 
-		array_push($links, "<a href='$url'>" . __('Settings', $this->plugin::NAME) . '</a>');
+		array_push($links, "<a href='$url'>" . esc_html__('Settings', 'hestia-nginx-cache') . '</a>');
 		return $links;
 	}
 
@@ -66,20 +66,20 @@ class Hestia_Nginx_Cache_Admin
 		register_setting(
 			$this->plugin::NAME,
 			$this->plugin::NAME,
-			array('sanitize_callback' => array($this, 'validate_options'))
+			['sanitize_callback' => [$this, 'validate_options']]
 		);
 
-		add_settings_section('api_settings', 'API Settings', array($this, 'api_settings_text'), $this->plugin::NAME);
-		add_settings_field('api_setting_host', 'Server hostname', array($this, 'api_setting_host'), $this->plugin::NAME, 'api_settings');
-		add_settings_field('api_setting_port', 'Server port', array($this, 'api_setting_port'), $this->plugin::NAME, 'api_settings');
-		add_settings_field('api_setting_access_key', 'Access key', array($this, 'api_setting_access_key'), $this->plugin::NAME, 'api_settings');
-		add_settings_field('api_setting_secret_key', 'Secret key', array($this, 'api_setting_secret_key'), $this->plugin::NAME, 'api_settings');
-		add_settings_field('api_setting_user', 'Hestia username', array($this, 'api_setting_user'), $this->plugin::NAME, 'api_settings');
-		add_settings_field('api_setting_domain', 'Domain to purge', array($this, 'api_setting_domain'), $this->plugin::NAME, 'api_settings');
+		add_settings_section('api_settings', esc_html__('API Settings', 'hestia-nginx-cache'), [$this, 'api_settings_text'], $this->plugin::NAME);
+		add_settings_field('api_setting_host', esc_html__('Server hostname', 'hestia-nginx-cache'), [$this, 'api_setting_host'], $this->plugin::NAME, 'api_settings');
+		add_settings_field('api_setting_port', esc_html__('Server port', 'hestia-nginx-cache'), [$this, 'api_setting_port'], $this->plugin::NAME, 'api_settings');
+		add_settings_field('api_setting_access_key', esc_html__('Access key', 'hestia-nginx-cache'), [$this, 'api_setting_access_key'], $this->plugin::NAME, 'api_settings');
+		add_settings_field('api_setting_secret_key', esc_html__('Secret key', 'hestia-nginx-cache'), [$this, 'api_setting_secret_key'], $this->plugin::NAME, 'api_settings');
+		add_settings_field('api_setting_user', esc_html__('Hestia username', 'hestia-nginx-cache'), [$this, 'api_setting_user'], $this->plugin::NAME, 'api_settings');
+		add_settings_field('api_setting_domain', esc_html__('Domain to purge', 'hestia-nginx-cache'), [$this, 'api_setting_domain'], $this->plugin::NAME, 'api_settings');
 
-		add_settings_section('plugin_settings', 'Plugin Settings', array($this, 'plugin_settings_text'), $this->plugin::NAME);
-		add_settings_field('plugin_setting_show_purge_button', 'Show button in the admin bar', array($this, 'plugin_setting_show_purge_button'), $this->plugin::NAME, 'plugin_settings');
-		add_settings_field('plugin_setting_purge_button_text', 'Admin bar button text', array($this, 'plugin_setting_purge_button_text'), $this->plugin::NAME, 'plugin_settings');
+		add_settings_section('plugin_settings', esc_html__('Plugin Settings', 'hestia-nginx-cache'), [$this, 'plugin_settings_text'], 'hestia-nginx-cache');
+		add_settings_field('plugin_setting_show_purge_button', esc_html__('Show button in the admin bar', 'hestia-nginx-cache'), [$this, 'plugin_setting_show_purge_button'], $this->plugin::NAME, 'plugin_settings');
+		add_settings_field('plugin_setting_purge_button_text', esc_html__('Admin bar button text', 'hestia-nginx-cache'), [$this, 'plugin_setting_purge_button_text'], $this->plugin::NAME, 'plugin_settings');
 	}
 
 	public function validate_options($input)
@@ -103,7 +103,7 @@ class Hestia_Nginx_Cache_Admin
 
 	public function api_settings_text()
 	{
-		echo '<p>Here you can set all the options for the API. Please refer to the plugin\'s installation guide for information on how to generate an API key.</p>';
+		echo '<p>' . esc_html__('Please refer to the plugin\'s installation guide for information on how to generate an API key.', 'hestia-nginx-cache') . '</p>';
 	}
 
 	public function api_setting_host()
@@ -152,7 +152,7 @@ class Hestia_Nginx_Cache_Admin
 
 	public function plugin_settings_text()
 	{
-		echo '<p>Some miscellaneous settings for the plugin.</p>';
+		echo '<p>' . esc_html__('Settings for the plugin.', 'hestia-nginx-cache') . '</p>';
 	}
 
 	public function plugin_setting_show_purge_button()
@@ -166,17 +166,17 @@ class Hestia_Nginx_Cache_Admin
 	{
 		$options = get_option($this->plugin::NAME);
 		$adminbar_button_text = $this->plugin::$is_configured ? esc_attr($options["adminbar_button_text"]) : "";
-		echo '<input id="plugin_setting_purge_button_text" placeholder="Empty for default" name="' . $this->plugin::NAME . '[adminbar_button_text]" type="text" value="' . $adminbar_button_text . '" />';
+		echo '<input id="plugin_setting_purge_button_text" placeholder="' . esc_html__('Leave empty for default', 'hestia-nginx-cache') . '" name="' . $this->plugin::NAME . '[adminbar_button_text]" type="text" value="' . $adminbar_button_text . '" />';
 	}
 
 	public function add_settings_page()
 	{
 		add_options_page(
-			__('Hestia Nginx Cache', $this->plugin::NAME),
-			__('Hestia Nginx Cache', $this->plugin::NAME),
+			esc_html__('Hestia Nginx Cache', 'hestia-nginx-cache'),
+			esc_html__('Hestia Nginx Cache', 'hestia-nginx-cache'),
 			'manage_options',
 			$this->plugin::NAME,
-			array($this, 'render_settings_page')
+			[$this, 'render_settings_page']
 		);
 	}
 
@@ -187,14 +187,14 @@ class Hestia_Nginx_Cache_Admin
 		}
 ?>
 		<div class="wrap">
-			<h1><?php esc_html_e('Hestia Nginx Cache', $this->plugin::NAME); ?></h1>
+			<h1><?php esc_html_e('Hestia Nginx Cache', 'hestia-nginx-cache'); ?></h1>
 
 			<form method="post" action="options.php">
 				<?php
 				settings_fields($this->plugin::NAME);
 				do_settings_sections($this->plugin::NAME);
 				submit_button();
-				submit_button('Purge cache', 'delete', 'purge_cache', false);
+				submit_button(esc_html__('Purge Nginx Cache', 'hestia-nginx-cache'), 'delete', 'purge_cache', false);
 				?>
 			</form>
 		</div>
@@ -208,13 +208,16 @@ class Hestia_Nginx_Cache_Admin
 
 		wp_register_script($this->plugin::NAME, plugins_url('assets/js/admin.js', dirname(__FILE__)));
 		wp_enqueue_script($this->plugin::NAME);
+		wp_localize_script(
+			$this->plugin::NAME,
+			'hestia_nginx_cache',
+			['could_not_purge' => esc_html__('The Hestia Nginx Cache could not be purged!', 'hestia-nginx-cache')]
+		);
 		if (!is_admin()) {
-			wp_localize_script(
-			    $this->plugin::NAME,
-			    'ajaxurl',
-			    array(
-			        'ajax_url' => admin_url('admin-ajax.php')
-			    )
+			wp_add_inline_script(
+				$this->plugin::NAME,
+				'const ajaxurl = ' . admin_url('admin-ajax.php'),
+				'before'
 			);
 		}
 	}
@@ -223,22 +226,22 @@ class Hestia_Nginx_Cache_Admin
 	{
 		$options = get_option($this->plugin::NAME);
 
-		$wp_admin_bar->add_node(array(
+		$wp_admin_bar->add_node([
 			'id'    => 'hestia-nginx-cache-manual-purge',
-			'title' => $this->plugin::$is_configured && $options['adminbar_button_text'] ? $options['adminbar_button_text'] : __('Purge Nginx Cache', $this->plugin::NAME),
-		));
+			'title' => $this->plugin::$is_configured && $options['adminbar_button_text'] ? $options['adminbar_button_text'] : esc_html__('Purge Nginx Cache', 'hestia-nginx-cache'),
+		]);
 	}
 
 	public function embed_wp_nonce()
 	{
-		echo '<span id="' . $this->plugin::NAME . '-purge-wp-nonce' . '">'
-			. wp_create_nonce($this->plugin::NAME . '-purge-wp-nonce')
+		echo '<span id="hestia-nginx-cache-purge-wp-nonce">'
+			. wp_create_nonce('hestia-nginx-cache-purge-wp-nonce')
 			. '</span>';
 	}
 
 	public function embed_admin_notices()
 	{
-		echo '<div id="' . $this->plugin::NAME . '-admin-notices"></div>';
+		echo '<div id="hestia-nginx-cache-admin-notices"></div>';
 	}
 
 	public function purge()
@@ -249,7 +252,7 @@ class Hestia_Nginx_Cache_Admin
 		}
 
 		if (!$result || is_wp_error($result) || $exit_code != 0) {
-			$args = array('message'   => __('The Hestia Nginx Cache could not be purged!', $this->plugin::NAME));
+			$args = ['message'   => esc_html__('The Hestia Nginx Cache could not be purged!', 'hestia-nginx-cache')];
 			if (is_wp_error($result)) {
 				$args['error'] = $result->get_error_message();
 			} elseif ($result === false) {
@@ -260,10 +263,10 @@ class Hestia_Nginx_Cache_Admin
 				$args['error'] = 'Unknown error';
 			}
 			wp_send_json_error($args);
-		} elseif (wp_verify_nonce($_POST['wp_nonce'], $this->plugin::NAME . '-purge-wp-nonce')) {
-			wp_send_json_success(array(
-				'message' => __('The Hestia Nginx Cache was purged successfully.', $this->plugin::NAME)
-			));
+		} elseif (wp_verify_nonce($_POST['wp_nonce'], 'hestia-nginx-cache-purge-wp-nonce')) {
+			wp_send_json_success([
+				'message' => esc_html__('The Hestia Nginx Cache was purged successfully.', 'hestia-nginx-cache')
+			]);
 		}
 	}
 }

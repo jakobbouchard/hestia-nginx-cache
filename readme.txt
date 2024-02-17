@@ -5,11 +5,11 @@ Tags: cache, caching, wp-cache, flush, purge, hestia, hestiacp, nginx
 Requires at least: 4.8
 Tested up to: 6.4
 Requires PHP: 5.4
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
-Purge Nginx cache automatically after making website changes. Uses the *new* HestiaCP API, released in 1.6.0.
+Purged the Nginx cache automatically after making website changes. Uses the *new* HestiaCP API, released in 1.6.0.
 
 == Description ==
 
@@ -69,6 +69,11 @@ If you are using Cloudflare and get an error when purging the cache, enter the h
 If your issues persist, do not hesitate to contact me via email!
 
 == Changelog ==
+
+= 2.2.4 =
+* Fix the purge button not working in the frontend.
+* Add notice when purging in the frontend.
+* Add translations for "pt_BR" and "fr_CA".
 
 = 2.2.3 =
 * Fix some PHP warnings.
