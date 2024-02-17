@@ -17,7 +17,6 @@ msgstr ""
 "PO-Revision-Date: 2024-02-17 03:47+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hestia-nginx-cache\n"
-"X-Loco-Version: 2.6.6; wp-6.4.3"
 
 #. Plugin Name of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php 
