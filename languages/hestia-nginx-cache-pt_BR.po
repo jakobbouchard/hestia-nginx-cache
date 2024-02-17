@@ -14,9 +14,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Loco-Source-Locale: en_CA\n"
 "POT-Creation-Date: 2024-02-14T03:00:09+00:00\n"
-"PO-Revision-Date: 2024-02-17 03:47+0000\n"
+"PO-Revision-Date: 2024-02-17 04:04+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hestia-nginx-cache\n"
+"X-Loco-Version: 2.6.6; wp-6.4.3"
 
 #. Plugin Name of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php 
@@ -59,7 +60,7 @@ msgstr "Configurações da API"
 
 #: includes/admin.php:73 includes/site_health.php:62
 msgid "Server hostname"
-msgstr "Nome do host do servidor"
+msgstr "Hostname do servidor"
 
 #: includes/admin.php:74 includes/site_health.php:66
 msgid "Server port"
@@ -75,7 +76,7 @@ msgstr "Chave secreta"
 
 #: includes/admin.php:77
 msgid "Hestia username"
-msgstr "Nome de usuário do Hestia"
+msgstr "Usuário do Hestia"
 
 #: includes/admin.php:78
 msgid "Domain to purge"
@@ -94,8 +95,12 @@ msgid "Admin bar button text"
 msgstr "Texto do botão na barra de administração"
 
 #: includes/admin.php:106
-msgid "Please refer to the plugin's installation guide for information on how to generate an API key."
-msgstr "Por favor, consulte o guia de instalação do plugin para obter informações sobre como gerar uma chave de API."
+msgid ""
+"Please refer to the plugin's installation guide for information on how to "
+"generate an API key."
+msgstr ""
+"Por favor, consulte o guia de instalação do plugin para obter informações "
+"sobre como gerar uma chave de API."
 
 #: includes/admin.php:155
 msgid "Settings for the plugin."
@@ -103,7 +108,7 @@ msgstr "Configurações para o plugin"
 
 #: includes/admin.php:169
 msgid "Leave empty for default"
-msgstr "Deixe em branco para o padrão"
+msgstr "Padrão em branco"
 
 #: includes/admin.php:197 includes/admin.php:231
 msgid "Purge Nginx Cache"
