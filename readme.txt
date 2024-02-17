@@ -72,6 +72,7 @@ If your issues persist, do not hesitate to contact me via email!
 
 = 2.2.4 =
 * Fix the purge button not working in the frontend.
+* Add notice when purging in the frontend.
 * Add translations for "pt_BR" and "fr_CA".
 
 = 2.2.3 =
