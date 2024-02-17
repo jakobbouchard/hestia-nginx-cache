@@ -1,12 +1,25 @@
 window.addEventListener("DOMContentLoaded", (_evt) => {
+	/** @type {number|null} */
+	let timeout = null;
+
+	/** @returns {HTMLDivElement} */
+	function createContainer() {
+		const container = document.createElement("div");
+		container.id = "hestia-nginx-cache-admin-notices";
+		document.querySelector("#wpadminbar").append(container);
+		return container;
+	}
+
 	/**
-	 * @param {Response|Error} resOrError
+	 * @param {string} message
+	 * @param {boolean} [success=false]
 	 */
-	async function showNotice(message, success = false) {
+	function showNotice(message, success = false) {
 		const container = document.querySelector("#hestia-nginx-cache-admin-notices");
 		if (!container) {
-			return;
+			container = createContainer();
 		}
+
 		let notice = container.querySelector(".notice");
 		if (notice) {
 			notice.classList.value = `notice ${success ? "notice-success" : "notice-error"}`;
@@ -17,11 +30,14 @@ window.addEventListener("DOMContentLoaded", (_evt) => {
 			notice.appendChild(document.createElement("p")).textContent = message;
 			container.appendChild(notice);
 		}
+
+		if (timeout) {
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(notice.remove, 5000);
 	}
 
-	/**
-	 * @param {Event} evt
-	 */
+	/** @param {Event} evt */
 	async function purge(evt) {
 		evt.preventDefault();
 		const nonce = document.querySelector("#hestia-nginx-cache-purge-wp-nonce");

@@ -1,3 +1,39 @@
+body:not(.wp-admin) #hestia-nginx-cache-admin-notices {
+	position: absolute;
+	top: 32px;
+	left: 0;
+	right: 0;
+	z-index: 9999;
+}
+body:not(.wp-admin) #hestia-nginx-cache-admin-notices .notice {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left-width: 1px;
+	border-left-color: rgb(195, 196, 199);
+	border-left-width: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin: 5px 15px 2px;
+	padding: 1px 12px;
+}
+body:not(.wp-admin) #hestia-nginx-cache-admin-notices .notice-success {
+	border-left-color: #00a32a;
+}
+body:not(.wp-admin) #hestia-nginx-cache-admin-notices .notice-error {
+	border-left-color: #d63638;
+}
+body:not(.wp-admin) #hestia-nginx-cache-admin-notices .notice p {
+	margin: .5em 0;
+	padding: 2px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #3c434a;
+}
+@media (max-width: 782px) {
+	body:not(.wp-admin) #hestia-nginx-cache-admin-notices {
+		top: 46px;
+	}
+}
+
 li#wp-admin-bar-hestia-nginx-cache-manual-purge > .ab-item {
 	cursor: pointer;
 }
