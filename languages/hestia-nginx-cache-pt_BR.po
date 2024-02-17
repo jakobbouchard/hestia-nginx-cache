@@ -1,5 +1,5 @@
-# Copyright (C) 2021 Jakob Bouchard
-# This file is distributed under the GPL v2 or later.
+# Copyright (C) 2024 Jakob Bouchard
+# This file is distributed under the GPL v3.
 msgid ""
 msgstr ""
 "Project-Id-Version: Hestia Nginx Cache 2.2.4\n"
@@ -7,22 +7,20 @@ msgstr ""
 "cache\n"
 "Last-Translator: Maison da Silva\n"
 "Language-Team: Português do Brasil\n"
+"Language: pt-BR\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-09-17T15:33:57-04:00\n"
-"PO-Revision-Date: 2024-01-27 14:41+0000\n"
+"X-Loco-Source-Locale: en_CA\n"
+"POT-Creation-Date: 2024-02-14T03:00:09+00:00\n"
+"PO-Revision-Date: 2024-02-17 04:04+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hestia-nginx-cache\n"
-"Language: pt_BR\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.6.6; wp-6.4.2"
 
 #. Plugin Name of the plugin
-#: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php
-#: includes/admin.php:175
-#: includes/admin.php:176
-#: includes/admin.php:190
+#: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php 
+#: includes/admin.php:175 includes/admin.php:176 includes/admin.php:190 
 #: includes/site_health.php:45
 msgid "Hestia Nginx Cache"
 msgstr "Hestia Nginx Cache"
@@ -34,12 +32,8 @@ msgstr "https://github.com/jakobbouchard/hestia-nginx-cache"
 
 #. Description of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php
-msgid ""
-"Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache "
-"when needed."
-msgstr ""
-"Integração de Hestia Nginx Cache para WordPress. Limpa automaticamente o "
-"cache Nginx quando necessário."
+msgid "Hestia Nginx Cache Integration for WordPress. Auto-purges the Nginx cache when needed."
+msgstr "Integração de Hestia Nginx Cache para WordPress. Limpa automaticamente o cache Nginx quando necessário."
 
 #. Author of the plugin
 #: C:\Users\Jakob\Dev\hestia-nginx-cache\hestia-nginx-cache.php
@@ -51,16 +45,90 @@ msgstr "Jakob Bouchard"
 msgid "https://jakobbouchard.dev"
 msgstr "https://jakobbouchard.dev"
 
-#: includes/admin.php:214
-#: includes/admin.php:255
+#: includes/admin.php:60
+msgid "Settings"
+msgstr "Configuração"
+
+#: includes/admin.php:72
+msgid "API Settings"
+msgstr "Configurações da API"
+
+#: includes/admin.php:73 includes/site_health.php:62
+msgid "Server hostname"
+msgstr "Hostname do servidor"
+
+#: includes/admin.php:74 includes/site_health.php:66
+msgid "Server port"
+msgstr "Porta do servidor"
+
+#: includes/admin.php:75
+msgid "Access key"
+msgstr "Chave de acesso"
+
+#: includes/admin.php:76
+msgid "Secret key"
+msgstr "Chave secreta"
+
+#: includes/admin.php:77
+msgid "Hestia username"
+msgstr "Usuário do Hestia"
+
+#: includes/admin.php:78
+msgid "Domain to purge"
+msgstr "Domínio a limpar"
+
+#: includes/admin.php:80
+msgid "Plugin Settings"
+msgstr "Configurações do Plugin"
+
+#: includes/admin.php:81
+msgid "Show button in the admin bar"
+msgstr "Exibir botão na barra de administração"
+
+#: includes/admin.php:82
+msgid "Admin bar button text"
+msgstr "Texto do botão na barra de administração"
+
+#: includes/admin.php:106
+msgid ""
+"Please refer to the plugin's installation guide for information on how to "
+"generate an API key."
+msgstr ""
+"Por favor, consulte o guia de instalação do plugin para obter informações "
+"sobre como gerar uma chave de API."
+
+#: includes/admin.php:155
+msgid "Settings for the plugin."
+msgstr "Configurações para o plugin"
+
+#: includes/admin.php:169
+msgid "Leave empty for default"
+msgstr "Padrão em branco"
+
+#: includes/admin.php:197 includes/admin.php:231
 msgid "Purge Nginx Cache"
-msgstr "Limpar Cache do Nginx Hestia Cache"
+msgstr "Limpar Cache do Nginx"
+
+#: includes/admin.php:214 includes/admin.php:255
+msgid "The Hestia Nginx Cache could not be purged!"
+msgstr "Não foi possível limpar o Cache do Nginx Hestia Cache!"
 
 #: includes/admin.php:268
 msgid "The Hestia Nginx Cache was purged successfully."
 msgstr "O Cache do Hestia Nginx Cache foi limpo com sucesso."
 
-#: includes/admin.php:214
-#: includes/admin.php:255
-msgid "The Hestia Nginx Cache could not be purged!"
-msgstr "Não foi possível limpar o Cache do Nginx Hestia Cache!"
+#: includes/site_health.php:47
+msgid "Version"
+msgstr "Versão"
+
+#: includes/site_health.php:51
+msgid "Configuration"
+msgstr "Configurações"
+
+#: includes/site_health.php:52
+msgid "The plugin has been configured"
+msgstr "O plugin foi configurado"
+
+#: includes/site_health.php:52
+msgid "The plugin has not been configured"
+msgstr "O plugin não foi configurado"
