@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", (_evt) => {
 	 * @param {boolean} [success=false]
 	 */
 	function showNotice(message, success = false) {
-		const container = document.querySelector("#hestia-nginx-cache-admin-notices");
+		let container = document.querySelector("#hestia-nginx-cache-admin-notices");
 		if (!container) {
 			container = createContainer();
 		}

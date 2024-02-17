@@ -216,7 +216,7 @@ class Hestia_Nginx_Cache_Admin
 		if (!is_admin()) {
 			wp_add_inline_script(
 				$this->plugin::NAME,
-				'const ajaxurl = ' . admin_url('admin-ajax.php'),
+				'const ajaxurl = "' . admin_url('admin-ajax.php') . '";',
 				'before'
 			);
 		}
